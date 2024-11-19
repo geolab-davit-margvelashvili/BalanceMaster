@@ -1,0 +1,17 @@
+[
+	{
+		"AccountId": 1,
+		"Amount": 20,
+		"Currency": "GEL"
+	},
+	{
+		"AccountId": 2,
+		"Amount": 30,
+		"Currency": "GEL"
+	},
+	{
+		"AccountId": 1,
+		"Amount": 10,
+		"Currency": "GEL"
+	}
+]
