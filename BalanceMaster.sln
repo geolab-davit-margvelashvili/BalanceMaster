@@ -5,9 +5,11 @@ VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BalanceMaster.Service", "BalanceMaster.Service\BalanceMaster.Service.csproj", "{96E2D4A6-E8CC-44DC-B0CC-4EF33759471F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BalanceMaster.Service.Tests", "BalanceMaster.Service.Tests\BalanceMaster.Service.Tests.csproj", "{60D66A71-C302-43B3-8B93-D08A3DB03A28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BalanceMaster.Service.Tests", "BalanceMaster.Service.Tests\BalanceMaster.Service.Tests.csproj", "{60D66A71-C302-43B3-8B93-D08A3DB03A28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BalanceMaster.ConsoleApp", "BalanceMaster.ConsoleApp\BalanceMaster.ConsoleApp.csproj", "{513F218E-E56E-4FE1-90EA-571E8B760DFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BalanceMaster.ConsoleApp", "BalanceMaster.ConsoleApp\BalanceMaster.ConsoleApp.csproj", "{513F218E-E56E-4FE1-90EA-571E8B760DFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BalanceMaster.DesktopApp", "BalanceMaster.DesktopApp\BalanceMaster.DesktopApp.csproj", "{B6685359-2E13-4E29-9374-27C5989B206F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{513F218E-E56E-4FE1-90EA-571E8B760DFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{513F218E-E56E-4FE1-90EA-571E8B760DFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{513F218E-E56E-4FE1-90EA-571E8B760DFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6685359-2E13-4E29-9374-27C5989B206F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6685359-2E13-4E29-9374-27C5989B206F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6685359-2E13-4E29-9374-27C5989B206F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6685359-2E13-4E29-9374-27C5989B206F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

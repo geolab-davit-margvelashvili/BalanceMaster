@@ -1,5 +1,7 @@
 ﻿using BalanceMaster.Service.Commands;
+using BalanceMaster.Service.Services.Abstractions;
 using BalanceMaster.Service.Services.Implementations;
+using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
 
 namespace BalanceMaster.ConsoleApp;
@@ -8,8 +10,8 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        var accountRepository = new InMemoryAccountRepository();
-        var operationService = new OperationService(accountRepository);
+        var serviceProvider = RegisterServices().BuildServiceProvider();
+        var operationService = serviceProvider.GetRequiredService<OperationService>();
 
         var json = File.ReadAllText("Data.json");
 
@@ -18,5 +20,14 @@ internal class Program
         {
             operationService.Execute(debitCommand);
         }
+    }
+
+    public static IServiceCollection RegisterServices()
+    {
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddScoped<OperationService>();
+        serviceCollection.AddScoped<IAccountRepository, InMemoryAccountRepository>();
+
+        return serviceCollection;
     }
 }

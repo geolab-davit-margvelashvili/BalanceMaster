@@ -67,6 +67,7 @@ public class OperationServiceTests
         {
             Id = 1,
             Currency = "GEL",
+            Iban = "Account1",
             Balance = 0,
             Overdraft = new Overdraft
             {
