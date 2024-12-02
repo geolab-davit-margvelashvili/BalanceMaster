@@ -5,7 +5,7 @@ using BalanceMaster.Service.Services.Abstractions;
 
 namespace BalanceMaster.Service.Services.Implementations;
 
-public class OperationService
+public class OperationService : IOperationService
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IOperationRepository _operationRepository;
