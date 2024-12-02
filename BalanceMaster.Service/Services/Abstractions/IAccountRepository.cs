@@ -4,7 +4,9 @@ namespace BalanceMaster.Service.Services.Abstractions;
 
 public interface IAccountRepository
 {
-    Account GetById(int id);
+    Task<Account> GetByIdAsync(int id);
 
-    void SaveAccount(Account account);
+    Task<Account?> GetByIdOrDefaultAsync(int id);
+
+    Task SaveAccountAsync(Account account);
 }

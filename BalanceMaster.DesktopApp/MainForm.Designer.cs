@@ -46,7 +46,6 @@ partial class MainForm
         DebitButton.TabIndex = 0;
         DebitButton.Text = "Debit";
         DebitButton.UseVisualStyleBackColor = true;
-      
         // 
         // AccountIdInput
         // 
@@ -104,6 +103,7 @@ partial class MainForm
         CreditButton.TabIndex = 0;
         CreditButton.Text = "Credit";
         CreditButton.UseVisualStyleBackColor = true;
+        CreditButton.Click += CreditButton_Click;
         // 
         // MainForm
         // 

@@ -1,14 +1,54 @@
-﻿namespace BalanceMaster.Service.Models;
+﻿using BalanceMaster.Service.Exceptions;
+
+namespace BalanceMaster.Service.Models;
 
 public class Account
 {
-    public int Id { get; set; }
-    public required string Iban { get; set; }
-    public required string Currency { get; set; }
-    public decimal Balance { get; set; }
-    public int CustomerId { get; set; }
+    public int Id { get; }
+    public int CustomerId { get; }
 
-    public Overdraft? Overdraft { get; set; }
+    public string Iban { get; }
+    public string Currency { get; }
+    public decimal Balance { get; private set; }
+
+    public Overdraft? Overdraft { get; private set; }
+
+    public Account(int id, int customerId, string iban, string currency, decimal balance, Overdraft? overdraft)
+    {
+        Id = id;
+        Iban = iban;
+        Currency = currency;
+        Balance = balance;
+        CustomerId = customerId;
+        Overdraft = overdraft;
+    }
+
+    public void Debit(decimal amount)
+    {
+        if (amount < 0)
+            throw new DomainException("Account cannot debit negative amount");
+
+        Balance -= amount;
+    }
+
+    public void Credit(decimal amount)
+    {
+        if (amount < 0)
+            throw new DomainException("Account cannot credit negative amount");
+
+        Balance -= amount;
+    }
+
+    public void CloseOverdraft(Overdraft overdraft)
+    {
+        Overdraft = null;
+    }
+
+    public void OpenOverdraft(Overdraft overdraft)
+    {
+        // TODO: Add validation if overdraft is already open
+        Overdraft = overdraft;
+    }
 
     public decimal GetBalance()
     {

@@ -1,5 +1,6 @@
 ﻿using BalanceMaster.Service.Commands;
 using BalanceMaster.Service.Exceptions;
+using BalanceMaster.Service.Mappings;
 using BalanceMaster.Service.Services.Abstractions;
 
 namespace BalanceMaster.Service.Services.Implementations;
@@ -7,36 +8,44 @@ namespace BalanceMaster.Service.Services.Implementations;
 public class OperationService
 {
     private readonly IAccountRepository _accountRepository;
+    private readonly IOperationRepository _operationRepository;
 
-    public OperationService(IAccountRepository accountRepository)
+    public OperationService(IAccountRepository accountRepository, IOperationRepository operationRepository)
     {
         _accountRepository = accountRepository;
+        _operationRepository = operationRepository;
     }
 
-    public void Execute(DebitCommand command)
+    public async Task ExecuteAsync(DebitCommand command)
     {
         command.Validate();
 
-        var account = _accountRepository.GetById(command.AccountId);
+        var account = await _accountRepository.GetByIdAsync(command.AccountId);
 
         if (account.GetBalance() < command.Amount)
         {
             throw new InsufficientFundsException(account.Id);
         }
 
-        account.Balance -= command.Amount;
+        account.Debit(command.Amount);
 
-        _accountRepository.SaveAccount(account);
+        var operation = command.ToOperation();
+
+        await _operationRepository.SaveOperation(operation);
+        await _accountRepository.SaveAccountAsync(account);
     }
 
-    public void Execute(CreditCommand command)
+    public async Task ExecuteAsync(CreditCommand command)
     {
         command.Validate();
 
-        var account = _accountRepository.GetById(command.AccountId);
+        var account = await _accountRepository.GetByIdAsync(command.AccountId);
 
-        account.Balance += command.Amount;
+        account.Credit(command.Amount);
 
-        _accountRepository.SaveAccount(account);
+        var operation = command.ToOperation();
+
+        await _operationRepository.SaveOperation(operation);
+        await _accountRepository.SaveAccountAsync(account);
     }
 }

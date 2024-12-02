@@ -14,11 +14,11 @@ internal class Program
         var operationService = serviceProvider.GetRequiredService<OperationService>();
 
         var json = File.ReadAllText("Data.json");
-
         var debitCommands = JsonSerializer.Deserialize<List<DebitCommand>>(json);
+
         foreach (var debitCommand in debitCommands)
         {
-            operationService.Execute(debitCommand);
+            operationService.ExecuteAsync(debitCommand);
         }
     }
 

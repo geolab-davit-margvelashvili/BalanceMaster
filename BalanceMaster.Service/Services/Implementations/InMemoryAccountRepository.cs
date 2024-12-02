@@ -1,9 +1,10 @@
-﻿using BalanceMaster.Service.Models;
+﻿using BalanceMaster.Service.Exceptions;
+using BalanceMaster.Service.Models;
 using BalanceMaster.Service.Services.Abstractions;
 
 namespace BalanceMaster.Service.Services.Implementations;
 
-public class InMemoryAccountRepository : IAccountRepository
+public sealed class InMemoryAccountRepository : IAccountRepository
 {
     private readonly List<Account> _accounts;
 
@@ -43,13 +44,26 @@ public class InMemoryAccountRepository : IAccountRepository
         };
     }
 
-    public Account GetById(int id)
+    public async Task<Account> GetByIdAsync(int id)
     {
-        return _accounts.FirstOrDefault(account => account.Id == id);
+        var account = await GetByIdOrDefaultAsync(id);
+        if (account is null)
+        {
+            throw new ObjectNotFoundException(id.ToString(), nameof(Account));
+        }
+
+        return account;
     }
 
-    public void SaveAccount(Account account)
+    public Task<Account?> GetByIdOrDefaultAsync(int id)
     {
+        var account = _accounts.FirstOrDefault(account => account.Id == id); ;
+        return Task.FromResult(account);
+    }
+
+    public Task SaveAccountAsync(Account account)
+    {
+        return Task.CompletedTask;
         // We have in memory collection of account so we do not write account anywhere
     }
 }
