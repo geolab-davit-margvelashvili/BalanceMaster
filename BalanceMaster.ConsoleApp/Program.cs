@@ -11,7 +11,7 @@ internal class Program
     private static void Main(string[] args)
     {
         var serviceProvider = RegisterServices().BuildServiceProvider();
-        var operationService = serviceProvider.GetRequiredService<OperationService>();
+        var operationService = serviceProvider.GetRequiredService<IOperationService>();
 
         var json = File.ReadAllText("Data.json");
         var debitCommands = JsonSerializer.Deserialize<List<DebitCommand>>(json);
@@ -25,7 +25,7 @@ internal class Program
     public static IServiceCollection RegisterServices()
     {
         var serviceCollection = new ServiceCollection();
-        serviceCollection.AddScoped<OperationService>();
+        serviceCollection.AddScoped<IOperationService, OperationService>();
         serviceCollection.AddScoped<IAccountRepository, InMemoryAccountRepository>();
 
         return serviceCollection;
