@@ -9,11 +9,13 @@ namespace BalanceMaster.Service.Tests;
 
 public class OperationServiceTests
 {
-    private readonly Mock<IAccountRepository> _repository;
+    private readonly Mock<IAccountRepository> _accountRepository;
+    private readonly Mock<IOperationRepository> _operationRepository;
 
     public OperationServiceTests()
     {
-        _repository = new Mock<IAccountRepository>();
+        _accountRepository = new Mock<IAccountRepository>();
+        _operationRepository = new Mock<IOperationRepository>();
     }
 
     [Fact(DisplayName = "დებეტის ოპერაცია ანგარიშზე ბალანსს უნდა ამცირებდეს")]
@@ -21,18 +23,20 @@ public class OperationServiceTests
     {
         // Arrange
         var account = new Account
-        {
-            Id = 1,
-            Currency = "GEL",
-            Iban = "Account1",
-            Balance = 100
-        };
+        (
+            id: 1,
+            customerId: 1,
+            iban: "Account1",
+            currency: "GEL",
+            balance: 100,
+            overdraft: null
+        );
 
-        _repository
+        _accountRepository
             .Setup(x => x.GetByIdAsync(account.Id))
             .ReturnsAsync(account);
 
-        var service = new OperationService(_repository.Object);
+        var service = new OperationService(_accountRepository.Object, _operationRepository.Object);
         var debitCommand = new DebitCommand
         {
             Amount = 20,
@@ -52,23 +56,24 @@ public class OperationServiceTests
     {
         // Arrange
         var account = new Account
-        {
-            Id = 1,
-            Currency = "GEL",
-            Iban = "Account1",
-            Balance = 0,
-            Overdraft = new Overdraft
+        (
+            id: 1,
+            customerId: 1,
+            iban: "Account1",
+            currency: "GEL",
+            balance: 0,
+            overdraft: new Overdraft
             {
                 Amount = 100,
                 StartDate = DateTime.Today.AddDays(-1),
                 EndDate = DateTime.Today.AddDays(1)
-            },
-        };
-        _repository
+            }
+        );
+        _accountRepository
             .Setup(x => x.GetByIdAsync(1))
             .ReturnsAsync(account);
 
-        var service = new OperationService(_repository.Object);
+        var service = new OperationService(_accountRepository.Object, _operationRepository.Object);
         var debitCommand = new DebitCommand
         {
             Amount = 20,

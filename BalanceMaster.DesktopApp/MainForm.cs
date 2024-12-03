@@ -22,7 +22,7 @@ public partial class MainForm : Form
 
         debitCommand.Validate();
 
-        var operationService = new OperationService(new InMemoryAccountRepository());
+        var operationService = new OperationService(new InMemoryAccountRepository(), new InMemoryOperationRepository());
         operationService.ExecuteAsync(debitCommand);
     }
 
@@ -35,15 +35,12 @@ public partial class MainForm : Form
     private static async Task<long> LongRunningTask()
     {
         await Task.Delay(5000);
-        
-        var resultTask = Task.Run(() => Sum(1_000_000_000));
 
-        
+        var resultTask = Task.Run(() => Sum(1_000_000_000));
 
         var result = await resultTask;
         return result;
     }
-    
 
     private static long Sum(long numbers)
     {
