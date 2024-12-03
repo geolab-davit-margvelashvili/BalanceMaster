@@ -36,7 +36,7 @@ public class Account
         if (amount < 0)
             throw new DomainException("Account cannot credit negative amount");
 
-        Balance -= amount;
+        Balance += amount;
     }
 
     public void CloseOverdraft(Overdraft overdraft)

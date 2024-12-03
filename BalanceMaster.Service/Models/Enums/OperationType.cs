@@ -3,5 +3,5 @@
 public enum OperationType
 {
     Debit = 10,
-    Credit = 20
+    Credit = 20,
 }
