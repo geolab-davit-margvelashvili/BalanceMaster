@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BalanceMaster.ConsoleApp", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BalanceMaster.DesktopApp", "BalanceMaster.DesktopApp\BalanceMaster.DesktopApp.csproj", "{B6685359-2E13-4E29-9374-27C5989B206F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BalanceMaster.Api", "BalanceMaster.Api\BalanceMaster.Api.csproj", "{55D221DE-D19C-462F-B3B2-B461F39939A4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{B6685359-2E13-4E29-9374-27C5989B206F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6685359-2E13-4E29-9374-27C5989B206F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6685359-2E13-4E29-9374-27C5989B206F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55D221DE-D19C-462F-B3B2-B461F39939A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55D221DE-D19C-462F-B3B2-B461F39939A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55D221DE-D19C-462F-B3B2-B461F39939A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55D221DE-D19C-462F-B3B2-B461F39939A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -16,6 +16,11 @@ public class FakeAccountRepository : IAccountRepository
         throw new NotImplementedException();
     }
 
+    public Task<List<Account>> ListAsync()
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<Account?> GetByIdOrDefaultAsync(int id)
     {
         throw new NotImplementedException();

@@ -55,6 +55,11 @@ public sealed class InMemoryAccountRepository : IAccountRepository
         return account;
     }
 
+    public Task<List<Account>> ListAsync()
+    {
+        return Task.FromResult(_accounts);
+    }
+
     public Task<Account?> GetByIdOrDefaultAsync(int id)
     {
         var account = _accounts.FirstOrDefault(account => account.Id == id); ;
