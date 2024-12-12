@@ -1,10 +1,11 @@
-﻿using BalanceMaster.Service.Models;
+﻿using BalanceMaster.Service.Commands;
+using BalanceMaster.Service.Models;
 using BalanceMaster.Service.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BalanceMaster.Api.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/accounts")]
 [ApiController]
 public class AccountsController : ControllerBase
 {
@@ -16,40 +17,40 @@ public class AccountsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<Account> GetAccount(int id)
+    public async Task<Account> GetAccount([FromRoute(Name = "id")] int accountId, [FromQuery(Name = "active")] bool isActive)
     {
-        var account = await _repository.GetByIdAsync(id);
+        var account = await _repository.GetByIdAsync(accountId);
         return account;
     }
 
     [HttpGet]
-    public async Task<List<Account>> ListAccounts([FromQuery] decimal? balance)
+    public async Task<List<Account>> ListAccounts([FromQuery] QueryFilter? filter)
     {
-        var account = await _repository.ListAsync();
+        var account = await _repository.ListAsync(filter);
 
-        if (balance is not null)
-        {
-            return account.Where(x => x.Balance == balance.Value).ToList();
-        }
+        //if (balance is not null)
+        //{
+        //    return account.Where(x => x.Balance == balance.Value).ToList();
+        //}
 
         return account;
     }
 
-    [HttpGet("ListWithOverdrafts")]
+    [HttpGet("list-with-overdrafts")]
     public async Task<List<Account>> ListAccountsWithOverdraft()
     {
-        var account = await _repository.ListAsync();
+        var account = await _repository.ListAsync(null);
         return account.Where(x => x.Overdraft is not null).ToList();
     }
 
-    [HttpGet("CreditAccount")]
+    [HttpGet("credit-account")]
     public Task GetCreditAccount()
     {
         return Task.CompletedTask;
     }
 
-    [HttpPost("CreditAccount")]
-    public Task CreateCreditAccount()
+    [HttpPost("credit-account")]
+    public Task CreateCreditAccount([FromBody] OpenAccountCommand command)
     {
         return Task.CompletedTask;
     }

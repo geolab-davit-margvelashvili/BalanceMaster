@@ -1,3 +1,4 @@
+using BalanceMaster.Api.Controllers;
 using BalanceMaster.Service.Services.Abstractions;
 using BalanceMaster.Service.Services.Implementations;
 
@@ -7,7 +8,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 builder.Services.AddScoped<IAccountRepository, InMemoryAccountRepository>();
 
 var app = builder.Build();

@@ -16,7 +16,7 @@ public class FakeAccountRepository : IAccountRepository
         throw new NotImplementedException();
     }
 
-    public Task<List<Account>> ListAsync()
+    public Task<List<Account>> ListAsync(QueryFilter? filter)
     {
         throw new NotImplementedException();
     }

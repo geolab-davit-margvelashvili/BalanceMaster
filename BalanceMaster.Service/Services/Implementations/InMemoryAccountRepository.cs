@@ -55,7 +55,7 @@ public sealed class InMemoryAccountRepository : IAccountRepository
         return account;
     }
 
-    public Task<List<Account>> ListAsync()
+    public Task<List<Account>> ListAsync(QueryFilter? filter)
     {
         return Task.FromResult(_accounts);
     }
