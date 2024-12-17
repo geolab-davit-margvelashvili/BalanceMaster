@@ -1,4 +1,4 @@
-using BalanceMaster.Api.Controllers;
+using BalanceMaster.Api.Middlewares;
 using BalanceMaster.Service.Services.Abstractions;
 using BalanceMaster.Service.Services.Implementations;
 
@@ -9,6 +9,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IAccountRepository, InMemoryAccountRepository>();
+builder.Services.AddScoped<IOperationService, OperationService>();
+builder.Services.AddScoped<IOperationRepository, InMemoryOperationRepository>();
 
 var app = builder.Build();
 
@@ -20,6 +22,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseErrorHandlingMiddleware();
 
 app.UseAuthorization();
 

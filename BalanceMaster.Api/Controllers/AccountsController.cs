@@ -17,10 +17,13 @@ public class AccountsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<Account> GetAccount([FromRoute(Name = "id")] int accountId, [FromQuery(Name = "active")] bool isActive)
+    public async Task<ActionResult<Account>> GetAccount([FromRoute(Name = "id")] int accountId, [FromQuery(Name = "active")] bool isActive)
     {
-        var account = await _repository.GetByIdAsync(accountId);
-        return account;
+        var account = await _repository.GetByIdOrDefaultAsync(accountId);
+        if (account is not null)
+            return Ok(account);
+
+        return NotFound();
     }
 
     [HttpGet]

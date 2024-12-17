@@ -1,5 +1,4 @@
-﻿using BalanceMaster.Service.Services.Implementations;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace BalanceMaster.Service.Extensions;
@@ -12,7 +11,6 @@ public static class ServiceCollectionExtensions
             .GetExecutingAssembly()
             .GetTypes()
             .Where(t => t.IsClass && (t.Name.EndsWith("Service") || t.Name.EndsWith("Repository")))
-            .Where(t => t.GetCustomAttribute<ExcludeFromServiceCollectionAttribute>() == null)
             .Select(type => (Implementation: type, Interfaces: type.GetInterfaces()))
             .ToList();
 
@@ -25,10 +23,5 @@ public static class ServiceCollectionExtensions
         }
 
         return serviceCollection;
-    }
-
-    private static (int id, int value) Function()
-    {
-        return (1, 2);
     }
 }
