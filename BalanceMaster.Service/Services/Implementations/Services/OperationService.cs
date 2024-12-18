@@ -16,7 +16,7 @@ public sealed class OperationService : IOperationService
         _operationRepository = operationRepository;
     }
 
-    public async Task ExecuteAsync(DebitCommand command)
+    public async Task<Guid> ExecuteAsync(DebitCommand command)
     {
         command.Validate();
 
@@ -31,11 +31,11 @@ public sealed class OperationService : IOperationService
 
         var operation = command.ToOperation();
 
-        await _operationRepository.CreateAsync(operation);
-        await _accountRepository.CreateAsync(account);
+        await _accountRepository.UpdateAsync(account);
+        return await _operationRepository.CreateAsync(operation);
     }
 
-    public async Task ExecuteAsync(CreditCommand command)
+    public async Task<Guid> ExecuteAsync(CreditCommand command)
     {
         command.Validate();
 
@@ -45,7 +45,7 @@ public sealed class OperationService : IOperationService
 
         var operation = command.ToOperation();
 
-        await _operationRepository.CreateAsync(operation);
-        await _accountRepository.CreateAsync(account);
+        await _accountRepository.UpdateAsync(account);
+        return await _operationRepository.CreateAsync(operation);
     }
 }

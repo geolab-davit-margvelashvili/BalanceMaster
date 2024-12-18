@@ -4,7 +4,7 @@ namespace BalanceMaster.Service.Services.Abstractions;
 
 public interface IOperationService
 {
-    Task ExecuteAsync(DebitCommand command);
+    Task<Guid> ExecuteAsync(DebitCommand command);
 
-    Task ExecuteAsync(CreditCommand command);
+    Task<Guid> ExecuteAsync(CreditCommand command);
 }
