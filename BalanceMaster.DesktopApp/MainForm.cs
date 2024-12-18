@@ -9,10 +9,9 @@ public partial class MainForm : Form
     public MainForm()
     {
         InitializeComponent();
-        DebitButton.Click += DebitButtonClicked;
     }
 
-    private async void DebitButtonClicked(object? sender, EventArgs e)
+    private async void OnDebitButtonClick(object? sender, EventArgs e)
     {
         // Post request
         var debitCommand = new
@@ -50,31 +49,7 @@ public partial class MainForm : Form
         }
     }
 
-    private async void CreditButton_Click(object sender, EventArgs e)
+    private void OnSearchCustomerButtonClick(object sender, EventArgs e)
     {
-        var result = await LongRunningTask();
-        MessageBox.Show(result.ToString());
-    }
-
-    private static async Task<long> LongRunningTask()
-    {
-        await Task.Delay(5000);
-
-        var resultTask = Task.Run(() => Sum(1_000_000_000));
-
-        var result = await resultTask;
-        return result;
-    }
-
-    private static long Sum(long numbers)
-    {
-        long result = 0;
-
-        for (long i = 0; i < numbers; i++)
-        {
-            result += i;
-        }
-
-        return result;
     }
 }
