@@ -1,8 +1,9 @@
-﻿using ValidationException = BalanceMaster.Service.Exceptions.ValidationException;
+﻿using BalanceMaster.Service.Services.Abstractions;
+using ValidationException = BalanceMaster.Service.Exceptions.ValidationException;
 
 namespace BalanceMaster.Service.Commands;
 
-public abstract class OperationCommand
+public abstract class OperationCommandBase : ICommand
 {
     public int AccountId { get; set; }
     public decimal Amount { get; set; }

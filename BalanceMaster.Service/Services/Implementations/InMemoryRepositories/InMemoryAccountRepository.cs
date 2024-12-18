@@ -1,8 +1,9 @@
 ﻿using BalanceMaster.Service.Exceptions;
 using BalanceMaster.Service.Models;
+using BalanceMaster.Service.Queries;
 using BalanceMaster.Service.Services.Abstractions;
 
-namespace BalanceMaster.Service.Services.Implementations;
+namespace BalanceMaster.Service.Services.Implementations.InMemoryRepositories;
 
 public sealed class InMemoryAccountRepository : IAccountRepository
 {
@@ -55,7 +56,7 @@ public sealed class InMemoryAccountRepository : IAccountRepository
         return account;
     }
 
-    public Task<List<Account>> ListAsync(QueryFilter? filter)
+    public Task<List<Account>> ListAsync(AccountQueryFilter? filter)
     {
         return Task.FromResult(_accounts);
     }
@@ -66,9 +67,14 @@ public sealed class InMemoryAccountRepository : IAccountRepository
         return Task.FromResult(account);
     }
 
-    public Task SaveAccountAsync(Account account)
+    public Task<int> CreateAsync(Account account)
     {
-        return Task.CompletedTask;
+        return Task.FromResult(1);
         // We have in memory collection of account so we do not write account anywhere
+    }
+
+    public Task UpdateAsync(Account account)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -11,7 +11,7 @@ internal class Program
     private static void Main(string[] args)
     {
         var serviceProvider = new ServiceCollection()
-             .AddApplicationServices()
+             .AutoRegisterApplicationServices()
              .BuildServiceProvider();
 
         var operationService = serviceProvider.GetRequiredService<IOperationService>();

@@ -1,5 +1,5 @@
 ﻿namespace BalanceMaster.Service.Commands;
 
-public class DebitCommand : OperationCommand
+public class DebitCommand : OperationCommandBase
 {
 }

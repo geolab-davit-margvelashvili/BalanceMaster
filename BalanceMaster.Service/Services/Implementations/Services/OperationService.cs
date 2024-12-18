@@ -3,9 +3,9 @@ using BalanceMaster.Service.Exceptions;
 using BalanceMaster.Service.Mappings;
 using BalanceMaster.Service.Services.Abstractions;
 
-namespace BalanceMaster.Service.Services.Implementations;
+namespace BalanceMaster.Service.Services.Implementations.Services;
 
-public class OperationService : IOperationService
+public sealed class OperationService : IOperationService
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IOperationRepository _operationRepository;
@@ -31,8 +31,8 @@ public class OperationService : IOperationService
 
         var operation = command.ToOperation();
 
-        await _operationRepository.SaveOperation(operation);
-        await _accountRepository.SaveAccountAsync(account);
+        await _operationRepository.CreateAsync(operation);
+        await _accountRepository.CreateAsync(account);
     }
 
     public async Task ExecuteAsync(CreditCommand command)
@@ -45,7 +45,7 @@ public class OperationService : IOperationService
 
         var operation = command.ToOperation();
 
-        await _operationRepository.SaveOperation(operation);
-        await _accountRepository.SaveAccountAsync(account);
+        await _operationRepository.CreateAsync(operation);
+        await _accountRepository.CreateAsync(account);
     }
 }

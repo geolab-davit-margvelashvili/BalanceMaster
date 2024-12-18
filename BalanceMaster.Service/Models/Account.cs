@@ -1,12 +1,11 @@
 ﻿using BalanceMaster.Service.Exceptions;
+using BalanceMaster.Service.Services.Abstractions;
 
 namespace BalanceMaster.Service.Models;
 
-public class Account
+public class Account : DomainEntity<int>
 {
-    public int Id { get; }
     public int CustomerId { get; }
-
     public string Iban { get; }
     public string Currency { get; }
     public decimal Balance { get; private set; }
@@ -56,5 +55,11 @@ public class Account
             return Balance;
 
         return Balance + Overdraft.GetAmount();
+    }
+
+    public void Close()
+    {
+        if (Balance != 0)
+            throw new OperationException("Closing account", "account balance is not 0");
     }
 }

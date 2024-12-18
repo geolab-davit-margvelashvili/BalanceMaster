@@ -1,7 +1,7 @@
 ﻿using BalanceMaster.Service.Commands;
 using BalanceMaster.Service.Models;
 using BalanceMaster.Service.Services.Abstractions;
-using BalanceMaster.Service.Services.Implementations;
+using BalanceMaster.Service.Services.Implementations.Services;
 using FluentAssertions;
 using Moq;
 

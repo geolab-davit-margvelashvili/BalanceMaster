@@ -1,5 +1,6 @@
 ﻿using BalanceMaster.Service.Commands;
 using BalanceMaster.Service.Models;
+using BalanceMaster.Service.Queries;
 using BalanceMaster.Service.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,7 +28,7 @@ public class AccountsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<List<Account>> ListAccounts([FromQuery] QueryFilter? filter)
+    public async Task<List<Account>> ListAccounts([FromQuery] AccountQueryFilter? filter)
     {
         var account = await _repository.ListAsync(filter);
 

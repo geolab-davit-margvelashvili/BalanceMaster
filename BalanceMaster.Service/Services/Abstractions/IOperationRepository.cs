@@ -4,5 +4,5 @@ namespace BalanceMaster.Service.Services.Abstractions;
 
 public interface IOperationRepository
 {
-    Task SaveOperation(Operation operation);
+    Task<Guid> CreateAsync(Operation operation);
 }
