@@ -1,6 +1,7 @@
 ﻿using BalanceMaster.Domain.Abstractions;
 using BalanceMaster.Domain.Models;
 using BalanceMaster.Domain.Queries;
+using BalanceMaster.Service.Models;
 using BalanceMaster.Service.Services.Abstractions;
 
 namespace BalanceMaster.Service.Services.Implementations.FileRepositories;
@@ -9,7 +10,7 @@ public sealed class FileAccountRepository : FileRepositoryBase<Account, int>, IA
 {
     private readonly ISequenceProvider _sequenceProvider;
 
-    public FileAccountRepository(ISequenceProvider sequenceProvider) : base("accounts.json")
+    public FileAccountRepository(ISequenceProvider sequenceProvider, AppOptions options) : base(options.AccountRepositoryPath)
     {
         _sequenceProvider = sequenceProvider;
     }

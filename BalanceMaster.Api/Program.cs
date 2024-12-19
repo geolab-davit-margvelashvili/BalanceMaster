@@ -1,5 +1,6 @@
 using BalanceMaster.Api.Middlewares;
 using BalanceMaster.Service.Extensions;
+using BalanceMaster.Service.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationServices();
+
+var appOptions = new AppOptions
+{
+    AccountRepositoryPath = builder.Configuration.GetValue<string>("AccountRepositoryPath"),
+};
+
+builder.Services.AddSingleton(appOptions);
 
 var app = builder.Build();
 
