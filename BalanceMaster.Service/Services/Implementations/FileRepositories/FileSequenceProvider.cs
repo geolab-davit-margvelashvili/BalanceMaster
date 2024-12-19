@@ -1,4 +1,4 @@
-﻿using BalanceMaster.Service.Services.Abstractions;
+﻿using BalanceMaster.Domain.Abstractions;
 using System.Collections.Concurrent;
 using System.Text.Json;
 

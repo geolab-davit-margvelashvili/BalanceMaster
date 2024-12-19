@@ -1,5 +1,5 @@
-﻿using BalanceMaster.Service.Commands;
-using BalanceMaster.Service.Models;
+﻿using BalanceMaster.Domain.Commands;
+using BalanceMaster.Domain.Models;
 
 namespace BalanceMaster.Service.Mappings;
 

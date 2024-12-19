@@ -1,4 +1,4 @@
-﻿using BalanceMaster.Service.Exceptions;
+﻿using BalanceMaster.Domain.Exceptions;
 using System.Net;
 using System.Text.Json;
 

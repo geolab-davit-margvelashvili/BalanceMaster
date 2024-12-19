@@ -1,7 +1,7 @@
-﻿using BalanceMaster.Service.Exceptions;
-using BalanceMaster.Service.Models;
-using BalanceMaster.Service.Queries;
-using BalanceMaster.Service.Services.Abstractions;
+﻿using BalanceMaster.Domain.Abstractions;
+using BalanceMaster.Domain.Exceptions;
+using BalanceMaster.Domain.Models;
+using BalanceMaster.Domain.Queries;
 
 namespace BalanceMaster.Service.Services.Implementations.InMemoryRepositories;
 

@@ -1,4 +1,4 @@
-﻿using BalanceMaster.Service.Services.Abstractions;
+﻿using BalanceMaster.Domain.Abstractions;
 using BalanceMaster.Service.Services.Implementations.FileRepositories;
 using BalanceMaster.Service.Services.Implementations.Services;
 using Microsoft.Extensions.DependencyInjection;

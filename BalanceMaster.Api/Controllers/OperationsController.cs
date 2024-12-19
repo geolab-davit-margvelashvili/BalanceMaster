@@ -1,5 +1,5 @@
-﻿using BalanceMaster.Service.Commands;
-using BalanceMaster.Service.Services.Abstractions;
+﻿using BalanceMaster.Domain.Abstractions;
+using BalanceMaster.Domain.Commands;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BalanceMaster.Api.Controllers;

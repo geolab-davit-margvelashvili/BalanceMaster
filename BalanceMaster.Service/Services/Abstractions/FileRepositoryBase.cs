@@ -1,5 +1,6 @@
-﻿using BalanceMaster.Service.Exceptions;
-using System.Text.Json;
+﻿using System.Text.Json;
+using BalanceMaster.Domain.Exceptions;
+using BalanceMaster.Domain.Models.Abstractions;
 
 namespace BalanceMaster.Service.Services.Abstractions;
 

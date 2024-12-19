@@ -1,6 +1,6 @@
-﻿using BalanceMaster.Service.Commands;
-using BalanceMaster.Service.Models;
-using BalanceMaster.Service.Services.Abstractions;
+﻿using BalanceMaster.Domain.Abstractions;
+using BalanceMaster.Domain.Commands;
+using BalanceMaster.Domain.Models;
 
 namespace BalanceMaster.Service.Services.Implementations.Services;
 

@@ -1,5 +1,6 @@
-﻿using BalanceMaster.Service.Models;
-using BalanceMaster.Service.Queries;
+﻿using BalanceMaster.Domain.Abstractions;
+using BalanceMaster.Domain.Models;
+using BalanceMaster.Domain.Queries;
 using BalanceMaster.Service.Services.Abstractions;
 
 namespace BalanceMaster.Service.Services.Implementations.FileRepositories;
