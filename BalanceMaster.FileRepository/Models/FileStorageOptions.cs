@@ -1,6 +1,6 @@
-﻿namespace BalanceMaster.Service.Models;
+﻿namespace BalanceMaster.FileRepository.Models;
 
-public class AppOptions
+public class FileStorageOptions
 {
     public string AccountRepositoryPath { get; set; }
     public string CustomerRepositoryPath { get; set; }

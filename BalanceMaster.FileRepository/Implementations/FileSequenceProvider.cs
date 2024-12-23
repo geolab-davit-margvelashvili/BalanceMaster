@@ -1,8 +1,8 @@
-﻿using BalanceMaster.Domain.Abstractions;
+﻿using BalanceMaster.FileRepository.Abstractions;
 using System.Collections.Concurrent;
 using System.Text.Json;
 
-namespace BalanceMaster.Service.Services.Implementations.FileRepositories;
+namespace BalanceMaster.FileRepository.Implementations;
 
 public sealed class FileSequenceProvider : ISequenceProvider
 {

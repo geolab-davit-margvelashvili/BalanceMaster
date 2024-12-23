@@ -1,5 +1,4 @@
 ﻿using BalanceMaster.Domain.Abstractions;
-using BalanceMaster.Service.Services.Implementations.FileRepositories;
 using BalanceMaster.Service.Services.Implementations.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -27,16 +26,6 @@ public static class ServiceCollectionExtensions
 
         return serviceCollection;
     }
-
-    public static IServiceCollection AddApplicationServices(this IServiceCollection serviceCollection) => serviceCollection
-            .AddRepositories()
-            .AddServices();
-
-    public static IServiceCollection AddRepositories(this IServiceCollection serviceCollection) => serviceCollection
-        .AddScoped<ISequenceProvider, FileSequenceProvider>()
-        .AddScoped<IOperationRepository, FileOperationRepository>()
-        .AddScoped<IAccountRepository, FileAccountRepository>()
-        .AddScoped<ICustomerRepository, FileCustomerRepository>();
 
     public static IServiceCollection AddServices(this IServiceCollection serviceCollection) => serviceCollection
         .AddScoped<IOperationService, OperationService>()

@@ -1,16 +1,18 @@
 ﻿using BalanceMaster.Domain.Abstractions;
 using BalanceMaster.Domain.Models;
 using BalanceMaster.Domain.Queries;
-using BalanceMaster.Service.Models;
-using BalanceMaster.Service.Services.Abstractions;
+using BalanceMaster.FileRepository.Abstractions;
+using BalanceMaster.FileRepository.Models;
+using Microsoft.Extensions.Options;
 
-namespace BalanceMaster.Service.Services.Implementations.FileRepositories;
+namespace BalanceMaster.FileRepository.Implementations;
 
 public sealed class FileAccountRepository : FileRepositoryBase<Account, int>, IAccountRepository
 {
     private readonly ISequenceProvider _sequenceProvider;
 
-    public FileAccountRepository(ISequenceProvider sequenceProvider, AppOptions options) : base(options.AccountRepositoryPath)
+    public FileAccountRepository(ISequenceProvider sequenceProvider, IOptionsSnapshot<FileStorageOptions> options)
+        : base(options.Value.AccountRepositoryPath)
     {
         _sequenceProvider = sequenceProvider;
     }

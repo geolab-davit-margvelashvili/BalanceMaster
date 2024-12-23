@@ -1,8 +1,8 @@
-﻿using System.Text.Json;
-using BalanceMaster.Domain.Exceptions;
+﻿using BalanceMaster.Domain.Exceptions;
 using BalanceMaster.Domain.Models.Abstractions;
+using System.Text.Json;
 
-namespace BalanceMaster.Service.Services.Abstractions;
+namespace BalanceMaster.FileRepository.Abstractions;
 
 /// <summary>
 /// Generic file repository used for storing and retrieving domain object in/from files

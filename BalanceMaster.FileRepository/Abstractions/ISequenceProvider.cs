@@ -1,4 +1,4 @@
-﻿namespace BalanceMaster.Domain.Abstractions;
+﻿namespace BalanceMaster.FileRepository.Abstractions;
 
 public interface ISequenceProvider
 {

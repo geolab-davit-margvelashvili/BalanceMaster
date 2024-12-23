@@ -1,8 +1,8 @@
 ﻿using BalanceMaster.Domain.Abstractions;
 using BalanceMaster.Domain.Models;
-using BalanceMaster.Service.Services.Abstractions;
+using BalanceMaster.FileRepository.Abstractions;
 
-namespace BalanceMaster.Service.Services.Implementations.FileRepositories;
+namespace BalanceMaster.FileRepository.Implementations;
 
 public sealed class FileOperationRepository : FileRepositoryBase<Operation, Guid>, IOperationRepository
 {
