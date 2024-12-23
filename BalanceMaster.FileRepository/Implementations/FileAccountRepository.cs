@@ -1,8 +1,8 @@
-﻿using BalanceMaster.Domain.Abstractions;
-using BalanceMaster.Domain.Models;
+﻿using BalanceMaster.Domain.Models;
 using BalanceMaster.Domain.Queries;
 using BalanceMaster.FileRepository.Abstractions;
 using BalanceMaster.FileRepository.Models;
+using BalanceMaster.Service.Services.Abstractions;
 using Microsoft.Extensions.Options;
 
 namespace BalanceMaster.FileRepository.Implementations;

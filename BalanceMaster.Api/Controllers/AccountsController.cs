@@ -1,6 +1,6 @@
-﻿using BalanceMaster.Domain.Abstractions;
-using BalanceMaster.Domain.Models;
+﻿using BalanceMaster.Domain.Models;
 using BalanceMaster.Domain.Queries;
+using BalanceMaster.Service.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BalanceMaster.Api.Controllers;

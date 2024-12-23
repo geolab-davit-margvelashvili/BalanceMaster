@@ -1,7 +1,7 @@
 ﻿using BalanceMaster.Domain.Models;
 using BalanceMaster.Domain.Queries;
 
-namespace BalanceMaster.Domain.Abstractions;
+namespace BalanceMaster.Service.Services.Abstractions;
 
 public interface IAccountRepository
 {

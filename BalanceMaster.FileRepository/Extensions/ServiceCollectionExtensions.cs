@@ -1,6 +1,6 @@
-﻿using BalanceMaster.Domain.Abstractions;
-using BalanceMaster.FileRepository.Abstractions;
+﻿using BalanceMaster.FileRepository.Abstractions;
 using BalanceMaster.FileRepository.Implementations;
+using BalanceMaster.Service.Services.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BalanceMaster.FileRepository.Extensions;

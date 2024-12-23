@@ -1,6 +1,6 @@
-﻿using BalanceMaster.Domain.Abstractions;
-using BalanceMaster.Domain.Commands;
+﻿using BalanceMaster.Domain.Commands;
 using BalanceMaster.Domain.Models;
+using BalanceMaster.Service.Services.Abstractions;
 using BalanceMaster.Service.Services.Implementations.Services;
 using FluentAssertions;
 using Moq;

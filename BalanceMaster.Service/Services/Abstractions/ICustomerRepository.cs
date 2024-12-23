@@ -1,6 +1,6 @@
 ﻿using BalanceMaster.Domain.Models;
 
-namespace BalanceMaster.Domain.Abstractions;
+namespace BalanceMaster.Service.Services.Abstractions;
 
 public interface ICustomerRepository
 {

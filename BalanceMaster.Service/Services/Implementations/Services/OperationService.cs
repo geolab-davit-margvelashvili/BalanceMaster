@@ -2,6 +2,7 @@
 using BalanceMaster.Domain.Commands;
 using BalanceMaster.Domain.Exceptions;
 using BalanceMaster.Service.Mappings;
+using BalanceMaster.Service.Services.Abstractions;
 
 namespace BalanceMaster.Service.Services.Implementations.Services;
 
