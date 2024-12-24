@@ -1,4 +1,5 @@
-﻿using BalanceMaster.Service.Models;
+﻿using BalanceMaster.Domain.Models;
+using BalanceMaster.Domain.Queries;
 
 namespace BalanceMaster.Service.Services.Abstractions;
 
@@ -6,18 +7,11 @@ public interface IAccountRepository
 {
     Task<Account> GetByIdAsync(int id);
 
-    Task<List<Account>> ListAsync(QueryFilter? filter);
+    Task<List<Account>> ListAsync(AccountQueryFilter? filter);
 
     Task<Account?> GetByIdOrDefaultAsync(int id);
 
-    Task SaveAccountAsync(Account account);
-}
+    Task<int> CreateAsync(Account account);
 
-public class QueryFilter
-{
-    public decimal? MinBalance { get; set; }
-    public decimal? MaxBalance { get; set; }
-    public bool? IsActive { get; set; }
-    public string? Currency { get; set; }
-    public bool? IsDebitAccount { get; set; }
+    Task UpdateAsync(Account account);
 }

@@ -1,5 +1,5 @@
-﻿using BalanceMaster.Service.Commands;
-using BalanceMaster.Service.Models;
+﻿using BalanceMaster.Domain.Models;
+using BalanceMaster.Domain.Queries;
 using BalanceMaster.Service.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,34 +27,6 @@ public class AccountsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<List<Account>> ListAccounts([FromQuery] QueryFilter? filter)
-    {
-        var account = await _repository.ListAsync(filter);
-
-        //if (balance is not null)
-        //{
-        //    return account.Where(x => x.Balance == balance.Value).ToList();
-        //}
-
-        return account;
-    }
-
-    [HttpGet("list-with-overdrafts")]
-    public async Task<List<Account>> ListAccountsWithOverdraft()
-    {
-        var account = await _repository.ListAsync(null);
-        return account.Where(x => x.Overdraft is not null).ToList();
-    }
-
-    [HttpGet("credit-account")]
-    public Task GetCreditAccount()
-    {
-        return Task.CompletedTask;
-    }
-
-    [HttpPost("credit-account")]
-    public Task CreateCreditAccount([FromBody] OpenAccountCommand command)
-    {
-        return Task.CompletedTask;
-    }
+    public async Task<ActionResult<List<Account>>> ListAccounts([FromQuery] AccountQueryFilter? filter) =>
+        await _repository.ListAsync(filter);
 }

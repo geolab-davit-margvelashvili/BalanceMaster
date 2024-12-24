@@ -1,6 +1,7 @@
 using BalanceMaster.Api.Middlewares;
-using BalanceMaster.Service.Services.Abstractions;
-using BalanceMaster.Service.Services.Implementations;
+using BalanceMaster.FileRepository.Extensions;
+using BalanceMaster.FileRepository.Models;
+using BalanceMaster.Service.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,9 +9,13 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IAccountRepository, InMemoryAccountRepository>();
-builder.Services.AddScoped<IOperationService, OperationService>();
-builder.Services.AddScoped<IOperationRepository, InMemoryOperationRepository>();
+builder.Services
+    .AddServices()
+    .AddRepositories();
+
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+builder.Services.Configure<FileStorageOptions>(builder.Configuration.GetSection("AppOptions"));
 
 var app = builder.Build();
 

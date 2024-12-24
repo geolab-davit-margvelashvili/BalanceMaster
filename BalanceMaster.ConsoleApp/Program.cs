@@ -1,6 +1,6 @@
-﻿using BalanceMaster.Service.Commands;
+﻿using BalanceMaster.Domain.Abstractions;
+using BalanceMaster.Domain.Commands;
 using BalanceMaster.Service.Extensions;
-using BalanceMaster.Service.Services.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
 
@@ -11,7 +11,7 @@ internal class Program
     private static void Main(string[] args)
     {
         var serviceProvider = new ServiceCollection()
-             .AddApplicationServices()
+             .AutoRegisterApplicationServices()
              .BuildServiceProvider();
 
         var operationService = serviceProvider.GetRequiredService<IOperationService>();
