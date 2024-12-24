@@ -1,4 +1,6 @@
-﻿using BalanceMaster.Domain.Models;
+﻿using BalanceMaster.Domain.Abstractions;
+using BalanceMaster.Domain.Commands;
+using BalanceMaster.Domain.Models;
 using BalanceMaster.Domain.Queries;
 using BalanceMaster.Service.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
@@ -7,12 +9,15 @@ namespace BalanceMaster.Api.Controllers;
 
 [Route("api/accounts")]
 [ApiController]
-public class AccountsController : ControllerBase
+public class
+    AccountsController : ControllerBase
 {
+    private readonly IAccountService _accountService;
     private readonly IAccountRepository _repository;
 
-    public AccountsController(IAccountRepository repository)
+    public AccountsController(IAccountService accountService, IAccountRepository repository)
     {
+        _accountService = accountService;
         _repository = repository;
     }
 
@@ -29,4 +34,18 @@ public class AccountsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<Account>>> ListAccounts([FromQuery] AccountQueryFilter? filter) =>
         await _repository.ListAsync(filter);
+
+    [HttpPost()]
+    public async Task<ActionResult> OpenAccount([FromBody] OpenAccountCommand command)
+    {
+        var id = await _accountService.ExecuteAsync(command);
+        return CreatedAtAction(nameof(GetAccount), new { id }, null);
+    }
+
+    [HttpPut("{id}/close")]
+    public async Task<ActionResult> CloseAccount([FromRoute] int id)
+    {
+        await _accountService.ExecuteAsync(new CloseAccountCommand { Id = id });
+        return NoContent();
+    }
 }

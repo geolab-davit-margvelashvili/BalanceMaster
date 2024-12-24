@@ -4,7 +4,7 @@ namespace BalanceMaster.Domain.Abstractions;
 
 public interface IAccountService
 {
-    Task ExecuteAsync(OpenAccountCommand command);
+    Task<int> ExecuteAsync(OpenAccountCommand command);
 
     Task ExecuteAsync(CloseAccountCommand command);
 }

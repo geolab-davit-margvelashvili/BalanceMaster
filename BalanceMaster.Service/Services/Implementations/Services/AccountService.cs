@@ -14,11 +14,10 @@ public sealed class AccountService : IAccountService
         _accountRepository = accountRepository;
     }
 
-    public async Task ExecuteAsync(OpenAccountCommand command)
+    public async Task<int> ExecuteAsync(OpenAccountCommand command)
     {
-        var account = new Account(1, command.CustomerId, command.Iban, command.Currency, 0m, null);
-
-        await _accountRepository.CreateAsync(account);
+        var account = new Account(0, command.CustomerId, command.Iban, command.Currency, 0m, null);
+        return await _accountRepository.CreateAsync(account);
     }
 
     public async Task ExecuteAsync(CloseAccountCommand command)

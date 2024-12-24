@@ -14,8 +14,7 @@ builder.Services
     .AddRepositories();
 
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-builder.Services.Configure<FileStorageOptions>(builder.Configuration.GetSection("AppOptions"));
+builder.Services.Configure<FileStorageOptions>(builder.Configuration.GetSection("FileStorageOptions"));
 
 var app = builder.Build();
 

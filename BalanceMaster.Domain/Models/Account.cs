@@ -1,5 +1,6 @@
 ﻿using BalanceMaster.Domain.Exceptions;
 using BalanceMaster.Domain.Models.Abstractions;
+using BalanceMaster.Domain.Models.Enums;
 
 namespace BalanceMaster.Domain.Models;
 
@@ -9,6 +10,8 @@ public class Account : DomainEntity<int>
     public string Iban { get; }
     public string Currency { get; }
     public decimal Balance { get; private set; }
+
+    public AccountStatus Status { get; set; }
 
     public Overdraft? Overdraft { get; private set; }
 
@@ -20,6 +23,7 @@ public class Account : DomainEntity<int>
         Balance = balance;
         CustomerId = customerId;
         Overdraft = overdraft;
+        Status = AccountStatus.Open;
     }
 
     public void Debit(decimal amount)
@@ -61,5 +65,7 @@ public class Account : DomainEntity<int>
     {
         if (Balance != 0)
             throw new OperationException("Closing account", "account balance is not 0");
+
+        Status = AccountStatus.Closed;
     }
 }

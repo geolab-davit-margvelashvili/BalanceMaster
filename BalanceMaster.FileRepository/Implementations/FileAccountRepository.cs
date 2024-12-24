@@ -11,7 +11,8 @@ public sealed class FileAccountRepository : FileRepositoryBase<Account, int>, IA
 {
     private readonly ISequenceProvider _sequenceProvider;
 
-    public FileAccountRepository(ISequenceProvider sequenceProvider, IOptionsSnapshot<FileStorageOptions> options)
+    public FileAccountRepository(ISequenceProvider sequenceProvider,
+        IOptionsSnapshot<FileStorageOptions> options)
         : base(options.Value.AccountRepositoryPath)
     {
         _sequenceProvider = sequenceProvider;
