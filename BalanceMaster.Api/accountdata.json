@@ -16,5 +16,32 @@
     "Status": 10,
     "Overdraft": null,
     "Id": 5
+  },
+  {
+    "CustomerId": 1,
+    "Iban": "GE1234543456554343",
+    "Currency": "GEL",
+    "Balance": 0,
+    "Status": 10,
+    "Overdraft": null,
+    "Id": 6
+  },
+  {
+    "CustomerId": 1,
+    "Iban": "GE1312383837272117",
+    "Currency": "GEL",
+    "Balance": 0,
+    "Status": 10,
+    "Overdraft": null,
+    "Id": 7
+  },
+  {
+    "CustomerId": 1,
+    "Iban": "GE17646724343732516491",
+    "Currency": "GEL",
+    "Balance": 0,
+    "Status": 10,
+    "Overdraft": null,
+    "Id": 8
   }
 ]

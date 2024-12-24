@@ -35,11 +35,11 @@ public class
     public async Task<ActionResult<List<Account>>> ListAccounts([FromQuery] AccountQueryFilter? filter) =>
         await _repository.ListAsync(filter);
 
-    [HttpPost()]
+    [HttpPost]
     public async Task<ActionResult> OpenAccount([FromBody] OpenAccountCommand command)
     {
         var id = await _accountService.ExecuteAsync(command);
-        return CreatedAtAction(nameof(GetAccount), new { id }, null);
+        return CreatedAtAction(nameof(GetAccount), new { id }, new { id });
     }
 
     [HttpPut("{id}/close")]
