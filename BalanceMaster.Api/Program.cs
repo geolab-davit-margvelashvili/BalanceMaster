@@ -16,7 +16,7 @@ builder.Services
 
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-builder.Services.Configure<FileStorageOptions>(builder.Configuration.GetSection("AppOptions"));
+builder.Services.Configure<FileStorageOptions>(builder.Configuration.GetSection("FileStorageOptions"));
 
 builder.Services.Configure<DatabaseOptions>(DatabaseOptions.SystemDatabaseSectionName,
     builder.Configuration.GetSection($"{DatabaseOptions.SectionName}:{DatabaseOptions.SystemDatabaseSectionName}"));
