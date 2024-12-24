@@ -1,3 +1,4 @@
+using BalanceMaster.Api;
 using BalanceMaster.Api.Middlewares;
 using BalanceMaster.FileRepository.Extensions;
 using BalanceMaster.FileRepository.Models;
@@ -16,6 +17,12 @@ builder.Services
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
 builder.Services.Configure<FileStorageOptions>(builder.Configuration.GetSection("AppOptions"));
+
+builder.Services.Configure<DatabaseOptions>(DatabaseOptions.SystemDatabaseSectionName,
+    builder.Configuration.GetSection($"{DatabaseOptions.SectionName}:{DatabaseOptions.SystemDatabaseSectionName}"));
+
+builder.Services.Configure<DatabaseOptions>(DatabaseOptions.BusinessDatabaseSectionName,
+    builder.Configuration.GetSection($"{DatabaseOptions.SectionName}:{DatabaseOptions.BusinessDatabaseSectionName}"));
 
 var app = builder.Build();
 

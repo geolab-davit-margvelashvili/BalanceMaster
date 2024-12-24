@@ -2,6 +2,7 @@
 using BalanceMaster.Domain.Queries;
 using BalanceMaster.Service.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace BalanceMaster.Api.Controllers;
 
@@ -11,9 +12,12 @@ public class AccountsController : ControllerBase
 {
     private readonly IAccountRepository _repository;
 
-    public AccountsController(IAccountRepository repository)
+    public AccountsController(IAccountRepository repository, IOptionsSnapshot<DatabaseOptions> options)
     {
         _repository = repository;
+
+        var systemDatabaseOptions = options.Get(DatabaseOptions.SystemDatabaseSectionName);
+        var businessDatabaseOptions = options.Get(DatabaseOptions.BusinessDatabaseSectionName);
     }
 
     [HttpGet("{id}")]
