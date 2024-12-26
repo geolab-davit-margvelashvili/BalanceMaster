@@ -1,10 +1,12 @@
 ﻿using BalanceMaster.Domain.Abstractions;
 using BalanceMaster.Domain.Commands;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BalanceMaster.Api.Controllers;
 
 [Route("api/operations")]
+[Authorize]
 [ApiController]
 public class OperationsController : ControllerBase
 {
