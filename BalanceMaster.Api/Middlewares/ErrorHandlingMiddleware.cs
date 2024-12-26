@@ -1,10 +1,12 @@
 ﻿using BalanceMaster.Domain.Exceptions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Text.Json;
 
 namespace BalanceMaster.Api.Middlewares;
 
-// You may need to install the Microsoft.AspNetCore.Http.Abstractions package into your project
 public class ErrorHandlingMiddleware
 {
     private readonly RequestDelegate _next;
@@ -31,79 +33,71 @@ public class ErrorHandlingMiddleware
 
     private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        // Define a default status code and response
-
-        var response = new ErrorResponse
+        // Default values for ProblemDetails
+        var problemDetails = new ProblemDetails
         {
-            StatusCode = (int)HttpStatusCode.InternalServerError,
-            Message = "An unexpected error occurred. Please try again later.",
-            Detail = exception.Message // Optionally remove for production
+            Title = "An unexpected error occurred.",
+            Status = (int)HttpStatusCode.InternalServerError,
+            Detail = exception.Message, // Optionally remove this in production
+            Instance = context.TraceIdentifier,
         };
 
-        // Customize status codes for specific exception types
+        // Customize ProblemDetails based on exception type
         switch (exception)
         {
             case UnauthorizedAccessException:
-                response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                response.ErrorCode = nameof(UnauthorizedAccessException);
-                response.Message = "Unauthorized access.";
-                break;
+                problemDetails.Title = "Unauthorized access.";
+                problemDetails.Status = (int)HttpStatusCode.Unauthorized;
+                problemDetails.Type = nameof(UnauthorizedAccessException);
+               break;
 
             case ArgumentNullException:
             case ArgumentException:
-                response.StatusCode = (int)HttpStatusCode.BadRequest;
-                response.ErrorCode = nameof(ArgumentException);
-                response.Message = "Invalid request data.";
-
+                problemDetails.Title = "Invalid request data.";
+                problemDetails.Status = (int)HttpStatusCode.BadRequest;
+                problemDetails.Type = nameof(ArgumentException);
                 break;
 
             case KeyNotFoundException:
-                response.StatusCode = (int)HttpStatusCode.NotFound;
-                response.ErrorCode = nameof(KeyNotFoundException);
-                response.Message = "Resource not found.";
+                problemDetails.Title = "Resource not found.";
+                problemDetails.Status = (int)HttpStatusCode.NotFound;
+                problemDetails.Type = nameof(KeyNotFoundException);
                 break;
 
             case ObjectNotFoundException:
-                response.StatusCode = (int)HttpStatusCode.NotFound;
-                response.ErrorCode = nameof(ObjectNotFoundException);
-                response.Message = exception.Message;
+                problemDetails.Title = "Object not found";
+                problemDetails.Status = (int)HttpStatusCode.NotFound;
+                problemDetails.Type = nameof(ObjectNotFoundException);
                 break;
 
             case InsufficientFundsException:
-                response.StatusCode = (int)HttpStatusCode.Forbidden;
-                response.ErrorCode = nameof(InsufficientFundsException);
-                response.Message = exception.Message;
+                problemDetails.Title = "Insufficient funds";
+                problemDetails.Status = (int)HttpStatusCode.Forbidden;
+                problemDetails.Type = nameof(InsufficientFundsException);
                 break;
 
             case ValidationException:
-                response.StatusCode = (int)HttpStatusCode.BadRequest;
-                response.ErrorCode = nameof(ValidationException);
-                response.Message = exception.Message;
+                problemDetails.Title = "Validation violation";
+                problemDetails.Status = (int)HttpStatusCode.BadRequest;
+                problemDetails.Type = nameof(ValidationException);
                 break;
 
             case DomainException:
-                response.StatusCode = (int)HttpStatusCode.BadRequest;
-                response.ErrorCode = nameof(DomainException);
-                response.Message = exception.Message;
+                problemDetails.Title = "Domain specific logic violation";
+                problemDetails.Status = (int)HttpStatusCode.BadRequest;
+                problemDetails.Type = nameof(DomainException);
                 break;
         }
 
-        // Set response status code and content type
-        context.Response.ContentType = "application/json";
-        context.Response.StatusCode = response.StatusCode;
+        // Set response details
+        context.Response.ContentType = "application/problem+json";
+        context.Response.StatusCode = problemDetails.Status.Value;
 
-        // Serialize the response to JSON
-        var result = JsonSerializer.Serialize(response);
+        // Serialize the ProblemDetails object to JSON
+        var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+        var result = JsonSerializer.Serialize(problemDetails, options);
         return context.Response.WriteAsync(result);
     }
-}
-
-public class ErrorResponse
-{
-    public int StatusCode { get; set; }
-    public string ErrorCode { get; set; }
-    public string Message { get; set; }
-    public string Detail { get; set; }
 }
 
 // Extension method used to add the middleware to the HTTP request pipeline.

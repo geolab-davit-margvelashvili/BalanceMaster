@@ -1,27 +1,15 @@
+using BalanceMaster.Api.Extensions;
 using BalanceMaster.Api.Middlewares;
-using BalanceMaster.FileRepository.Extensions;
-using BalanceMaster.FileRepository.Models;
-using BalanceMaster.Service.Extensions;
-using Swashbuckle.AspNetCore.Filters;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.ExampleFilters();
-});
-builder.Services.AddSwaggerExamplesFromAssemblies(Assembly.GetExecutingAssembly());
 
-builder.Services
-    .AddServices()
-    .AddRepositories();
-
-builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-builder.Services.Configure<FileStorageOptions>(builder.Configuration.GetSection("FileStorageOptions"));
+builder
+    .AddSwaggerDocumentation()
+    .AddApplicationServices()
+    .AddReloadableAppSettings()
+    .ConfigureFileStorageOptions();
 
 var app = builder.Build();
 
