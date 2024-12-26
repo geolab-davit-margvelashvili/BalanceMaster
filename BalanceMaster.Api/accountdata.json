@@ -13,9 +13,9 @@
     "Iban": "GE22ABNA1978967489",
     "Currency": "GEL",
     "Balance": 0,
-    "Status": 10,
+    "Status": 99,
     "Overdraft": null,
-    "Id": 5
+    "Id": 9
   },
   {
     "CustomerId": 1,
@@ -43,5 +43,14 @@
     "Status": 10,
     "Overdraft": null,
     "Id": 8
+  },
+  {
+    "CustomerId": 1,
+    "Iban": "GE22ABNA1978967489",
+    "Currency": "GEL",
+    "Balance": 0,
+    "Status": 99,
+    "Overdraft": null,
+    "Id": 9
   }
 ]

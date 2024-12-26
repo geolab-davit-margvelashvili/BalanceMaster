@@ -1,7 +1,7 @@
 ﻿using BalanceMaster.Domain.Commands;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace BalanceMaster.Api.Examples;
+namespace BalanceMaster.Api.Examples.AccountExamples;
 
 public sealed class OpenAccountCommandExamples : IMultipleExamplesProvider<OpenAccountCommand>
 {

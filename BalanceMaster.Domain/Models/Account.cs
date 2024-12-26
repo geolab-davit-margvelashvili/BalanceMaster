@@ -28,21 +28,27 @@ public class Account : DomainEntity<int>
 
     public void Debit(decimal amount)
     {
-        if (amount < 0)
-            throw new DomainException("Account cannot debit negative amount");
+        if (amount <= 0)
+            throw new DomainException("Account cannot debit non positive amount");
+
+        if (Status != AccountStatus.Open)
+            throw new OperationException("Debit", $"account status is {Status}");
 
         Balance -= amount;
     }
 
     public void Credit(decimal amount)
     {
-        if (amount < 0)
-            throw new DomainException("Account cannot credit negative amount");
+        if (amount <= 0)
+            throw new DomainException("Account cannot credit non positive amount");
+
+        if (Status != AccountStatus.Open)
+            throw new OperationException("Credit", $"account status is {Status}");
 
         Balance += amount;
     }
 
-    public void CloseOverdraft(Overdraft overdraft)
+    public void CloseOverdraft()
     {
         Overdraft = null;
     }
@@ -66,6 +72,7 @@ public class Account : DomainEntity<int>
         if (Balance != 0)
             throw new OperationException("Closing account", "account balance is not 0");
 
+        CloseOverdraft();
         Status = AccountStatus.Closed;
     }
 }
