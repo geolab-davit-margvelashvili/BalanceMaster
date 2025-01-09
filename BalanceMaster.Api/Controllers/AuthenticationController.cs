@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BalanceMaster.Api.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -20,7 +21,6 @@ public class AuthenticationController : ControllerBase
     public ActionResult<string> Authenticate(AuthenticationRequestBody request)
     {
         // Step 1: Validate the username/password
-
         var user = ValidateCredentials(request.UserName, request.Password);
 
         if (user is null)
@@ -29,7 +29,7 @@ public class AuthenticationController : ControllerBase
         }
 
         // Step 2: create token
-        var securityKey = new SymmetricSecurityKey(Convert.FromBase64String(_configuration.GetValue<string>("Authentication:SecretForKey")));
+        var securityKey = _configuration.GetIssuerSigningKey();
         var signInCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var claims = new List<Claim>
@@ -41,8 +41,8 @@ public class AuthenticationController : ControllerBase
         };
 
         var jwtSecurityToken = new JwtSecurityToken(
-                issuer: _configuration["Authentication:Issuer"],
-                audience: _configuration["Authentication:Audience"],
+                issuer: _configuration.GetJwtIssuer(),
+                audience: _configuration.GetJwtAudience(),
                 claims,
                 notBefore: DateTime.UtcNow,
                 expires: DateTime.UtcNow.AddHours(1),
