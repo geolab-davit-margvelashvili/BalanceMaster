@@ -14,20 +14,28 @@ public class
 {
     private readonly IAccountService _accountService;
     private readonly IAccountRepository _repository;
+    private readonly ILogger<AccountsController> _logger;
 
-    public AccountsController(IAccountService accountService, IAccountRepository repository)
+    public AccountsController(IAccountService accountService, IAccountRepository repository, ILogger<AccountsController> logger)
     {
         _accountService = accountService;
         _repository = repository;
+        _logger = logger;
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Account>> GetAccount([FromRoute(Name = "id")] int accountId, [FromQuery(Name = "active")] bool isActive)
     {
+        _logger.LogInformation("Searching account with id: {AccountId}", accountId);
+
         var account = await _repository.GetByIdOrDefaultAsync(accountId);
         if (account is not null)
+        {
+            _logger.LogDebug("Account found: {@Account}", account);
             return Ok(account);
+        }
 
+        _logger.LogWarning("Account not found");
         return NotFound();
     }
 

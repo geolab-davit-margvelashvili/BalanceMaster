@@ -45,7 +45,7 @@ public class AuthenticationController : ControllerBase
                 audience: _configuration.GetJwtAudience(),
                 claims,
                 notBefore: DateTime.UtcNow,
-                expires: DateTime.UtcNow.AddHours(1),
+                expires: DateTime.UtcNow.AddSeconds(10),
                 signInCredentials);
 
         var tokenToReturn = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
