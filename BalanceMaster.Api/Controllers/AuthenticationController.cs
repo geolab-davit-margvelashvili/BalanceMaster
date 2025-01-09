@@ -18,7 +18,7 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost("authenticate")]
-    public ActionResult<string> Authenticate(AuthenticationRequestBody request)
+    public ActionResult<string> Authenticate(AuthenticationRequest request)
     {
         // Step 1: Validate the username/password
         var user = ValidateCredentials(request.UserName, request.Password);
@@ -52,15 +52,20 @@ public class AuthenticationController : ControllerBase
         return Ok(tokenToReturn);
     }
 
-    private ApplicationUser? ValidateCredentials(string? requestUserName, string? requestPassword)
+    private ApplicationUser? ValidateCredentials(string requestUserName, string requestPassword)
     {
-        return new ApplicationUser()
+        if (requestUserName.ToLower() == "test@mail.com" && requestPassword == "123")
         {
-            Id = 1,
-            FirstName = "First",
-            LastName = "Last",
-            UserName = "test@mail.com"
-        };
+            return new ApplicationUser()
+            {
+                Id = 1,
+                FirstName = "First",
+                LastName = "Last",
+                UserName = "test@mail.com"
+            };
+        }
+
+        return null;
     }
 }
 
@@ -72,8 +77,8 @@ public sealed class ApplicationUser
     public string UserName { get; set; }
 }
 
-public sealed class AuthenticationRequestBody
+public sealed class AuthenticationRequest
 {
-    public string? UserName { get; set; }
-    public string? Password { get; set; }
+    public required string UserName { get; set; }
+    public required string Password { get; set; }
 }
