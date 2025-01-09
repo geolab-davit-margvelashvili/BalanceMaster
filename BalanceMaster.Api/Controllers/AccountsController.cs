@@ -14,11 +14,13 @@ public class
 {
     private readonly IAccountService _accountService;
     private readonly IAccountRepository _repository;
+    private readonly ILogger<AccountsController> _logger;
 
-    public AccountsController(IAccountService accountService, IAccountRepository repository)
+    public AccountsController(IAccountService accountService, IAccountRepository repository, ILogger<AccountsController> logger)
     {
         _accountService = accountService;
         _repository = repository;
+        _logger = logger;
     }
 
     [HttpGet("{id}")]
@@ -38,6 +40,7 @@ public class
     [HttpPost]
     public async Task<ActionResult> OpenAccount([FromBody] OpenAccountCommand command)
     {
+        _logger.LogInformation("Opening account: {Currency}, {Iban}", command.Currency, command.Iban);
         var id = await _accountService.ExecuteAsync(command);
         return CreatedAtAction(nameof(GetAccount), new { id }, new { id });
     }
