@@ -1,8 +1,8 @@
-﻿using BalanceMaster.FileRepository.Models;
+﻿using BalanceMaster.FileRepository.Extensions;
+using BalanceMaster.FileRepository.Models;
+using BalanceMaster.Service.Extensions;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
-using BalanceMaster.FileRepository.Extensions;
-using BalanceMaster.Service.Extensions;
 
 namespace BalanceMaster.Api.Extensions;
 
@@ -31,6 +31,12 @@ public static class WebApplicationBuilderExtensions
     {
         builder.Services.Configure<FileStorageOptions>(builder.Configuration.GetSection("FileStorageOptions"));
 
+        return builder;
+    }
+
+    public static WebApplicationBuilder AddJwtAuthentication(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddJwtBearerAuthentication(builder.Configuration);
         return builder;
     }
 
