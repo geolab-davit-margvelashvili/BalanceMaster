@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAccess", "DataAccess", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BalanceMaster.FileRepository", "BalanceMaster.FileRepository\BalanceMaster.FileRepository.csproj", "{1E42274B-0186-48A8-B082-05E05B13D4B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BalanceMaster.SqlRepository", "BalanceMaster.SqlRepository\BalanceMaster.SqlRepository.csproj", "{63B60312-C70A-453D-85B9-3A5EC9FE8766}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{1E42274B-0186-48A8-B082-05E05B13D4B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E42274B-0186-48A8-B082-05E05B13D4B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E42274B-0186-48A8-B082-05E05B13D4B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63B60312-C70A-453D-85B9-3A5EC9FE8766}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63B60312-C70A-453D-85B9-3A5EC9FE8766}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63B60312-C70A-453D-85B9-3A5EC9FE8766}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63B60312-C70A-453D-85B9-3A5EC9FE8766}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +79,7 @@ Global
 		{55D221DE-D19C-462F-B3B2-B461F39939A4} = {C111F730-C48E-44D6-948B-EB5014F4B644}
 		{48E836BA-3F8E-4F30-A120-AD4CB6DD2AAF} = {DE67B0E1-130D-454D-96DC-F4604AA64D0B}
 		{1E42274B-0186-48A8-B082-05E05B13D4B3} = {2A69CE70-F558-4F0A-9835-739CB41795AB}
+		{63B60312-C70A-453D-85B9-3A5EC9FE8766} = {2A69CE70-F558-4F0A-9835-739CB41795AB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0D11DDFE-A965-49D3-9A9B-05BC3BE82D18}

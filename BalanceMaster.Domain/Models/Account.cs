@@ -6,14 +6,21 @@ namespace BalanceMaster.Domain.Models;
 
 public class Account : DomainEntity<int>
 {
-    public int CustomerId { get; }
-    public string Iban { get; }
-    public string Currency { get; }
+    public int CustomerId { get; private set; }
+    public string Iban { get; private set; }
+    public string Currency { get; private set; }
     public decimal Balance { get; private set; }
 
-    public AccountStatus Status { get; set; }
+    public AccountStatus Status { get; private set; }
 
     public Overdraft? Overdraft { get; private set; }
+
+    private Account()
+    {
+        Currency = string.Empty;
+        Iban = string.Empty;
+        Status = AccountStatus.Open;
+    }
 
     public Account(int id, int customerId, string iban, string currency, decimal balance, Overdraft? overdraft)
     {
