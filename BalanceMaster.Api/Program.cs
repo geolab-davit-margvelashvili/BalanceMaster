@@ -22,8 +22,8 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog(); // Use Serilog as the logging provider
 
-var connectionString = builder.Configuration.GetConnectionString()
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer())
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
