@@ -7,7 +7,7 @@ namespace BalanceMaster.FileRepository.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddRepositories(this IServiceCollection serviceCollection) => serviceCollection
+    public static IServiceCollection AddFileRepositories(this IServiceCollection serviceCollection) => serviceCollection
         .AddScoped<ISequenceProvider, FileSequenceProvider>()
         .AddScoped<IOperationRepository, FileOperationRepository>()
         .AddScoped<IAccountRepository, FileAccountRepository>()

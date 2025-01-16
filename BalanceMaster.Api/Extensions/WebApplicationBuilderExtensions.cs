@@ -1,6 +1,6 @@
-﻿using BalanceMaster.FileRepository.Extensions;
-using BalanceMaster.FileRepository.Models;
+﻿using BalanceMaster.FileRepository.Models;
 using BalanceMaster.Service.Extensions;
+using BalanceMaster.SqlRepository.Extensions;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 
@@ -44,7 +44,7 @@ public static class WebApplicationBuilderExtensions
     {
         builder.Services
             .AddServices()
-            .AddRepositories();
+            .AddSqlRepositories();
 
         return builder;
     }
