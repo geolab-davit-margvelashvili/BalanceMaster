@@ -19,6 +19,7 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
 
         builder.Property(a => a.Iban)
             .IsRequired()
+            .IsUnicode(false)
             .HasMaxLength(34); // IBAN maximum length is typically 34 characters
 
         builder.Property(a => a.Currency)

@@ -27,6 +27,7 @@ public sealed class CustomerConfiguration : IEntityTypeConfiguration<Customer>
         builder.Property(c => c.PrivateNumber)
             .IsRequired()
             .IsFixedLength()
+            .IsUnicode(false)
             .HasMaxLength(11); // Set maximum length for PrivateNumber
 
         builder.Property(c => c.Status)
