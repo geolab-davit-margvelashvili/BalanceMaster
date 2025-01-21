@@ -1,5 +1,6 @@
 ﻿using BalanceMaster.Domain.Abstractions;
 using BalanceMaster.Domain.Commands;
+using BalanceMaster.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,17 +18,23 @@ public class OperationsController : ControllerBase
         _operationService = operationService;
     }
 
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Operation>> GetOperation(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
     [HttpPost("credit")]
     public async Task<ActionResult> Credit(CreditCommand command)
     {
-        await _operationService.ExecuteAsync(command);
-        return Ok();
+        var id = await _operationService.ExecuteAsync(command);
+        return CreatedAtAction(nameof(GetOperation), new { id }, new { id });
     }
 
     [HttpPost("debit")]
     public async Task<ActionResult> Debit(DebitCommand command)
     {
-        await _operationService.ExecuteAsync(command);
-        return Ok();
+        var id = await _operationService.ExecuteAsync(command);
+        return CreatedAtAction(nameof(GetOperation), new { id }, new { id });
     }
 }

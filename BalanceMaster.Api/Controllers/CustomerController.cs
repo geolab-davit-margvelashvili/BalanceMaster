@@ -19,19 +19,19 @@ public class CustomerController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> RegisterCustomer([FromBody] RegisterCustomerCommand command)
+    public async Task<ActionResult> RegisterCustomer([FromBody] RegisterCustomerCommand command)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var customerId = await _customerService.ExecuteAsync(command);
-        return CreatedAtAction(nameof(GetCustomerById), new { id = customerId }, null);
+        var id = await _customerService.ExecuteAsync(command);
+        return CreatedAtAction(nameof(GetCustomerById), new { id }, new { id });
     }
 
     [HttpPost("{id}/open")]
-    public async Task<IActionResult> OpenCustomer([FromRoute] int id, [FromBody] OpenCustomerCommand command)
+    public async Task<ActionResult> OpenCustomer([FromRoute] int id, [FromBody] OpenCustomerCommand command)
     {
         if (id != command.CustomerId)
         {
