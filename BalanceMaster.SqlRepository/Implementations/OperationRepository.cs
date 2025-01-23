@@ -16,6 +16,8 @@ internal sealed class OperationRepository : IOperationRepository
 
     public async Task<Guid> CreateAsync(Operation operation)
     {
+        throw new OperationException("Create operation", "Testing.....");
+
         await _appDbContext.Operations.AddAsync(operation);
         await _appDbContext.SaveChangesAsync();
         return operation.Id;

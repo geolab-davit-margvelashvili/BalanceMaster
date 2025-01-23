@@ -10,11 +10,13 @@ public sealed class OperationService : IOperationService
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IOperationRepository _operationRepository;
+    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-    public OperationService(IAccountRepository accountRepository, IOperationRepository operationRepository)
+    public OperationService(IAccountRepository accountRepository, IOperationRepository operationRepository, IUnitOfWorkFactory unitOfWorkFactory)
     {
         _accountRepository = accountRepository;
         _operationRepository = operationRepository;
+        _unitOfWorkFactory = unitOfWorkFactory;
     }
 
     public async Task<Guid> ExecuteAsync(DebitCommand command)
@@ -48,7 +50,13 @@ public sealed class OperationService : IOperationService
 
         var operation = command.ToOperation();
 
+        await using var unitOfWork = await _unitOfWorkFactory.StartUnitOfWorkAsync();
+
         await _accountRepository.UpdateAsync(account);
-        return await _operationRepository.CreateAsync(operation);
+        var operationId = await _operationRepository.CreateAsync(operation);
+
+        await unitOfWork.CommitAsync();
+
+        return operationId;
     }
 }
