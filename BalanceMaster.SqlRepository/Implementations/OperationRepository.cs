@@ -8,16 +8,21 @@ namespace BalanceMaster.SqlRepository.Implementations;
 internal sealed class OperationRepository : IOperationRepository
 {
     private readonly AppDbContext _appDbContext;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public OperationRepository(AppDbContext appDbContext)
+    public OperationRepository(AppDbContext appDbContext, IUnitOfWork unitOfWork)
     {
         _appDbContext = appDbContext;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Guid> CreateAsync(Operation operation)
     {
+        _unitOfWork.Start();
+
+        throw new OperationException("Create operation", "testing...");
         await _appDbContext.Operations.AddAsync(operation);
-        await _appDbContext.SaveChangesAsync();
+        await _unitOfWork.CompleteAsync();
         return operation.Id;
     }
 
