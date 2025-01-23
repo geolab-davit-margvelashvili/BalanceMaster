@@ -77,7 +77,7 @@ SET
     Overdraft_StartDate = o.StartDate,
     Overdraft_EndDate = o.EndDate
 FROM Accounts a
-INNER JOIN Overdrafts o ON a.id = o.accountId;");
+INNER JOIN Overdrafts o ON a.Id = o.AccountId;");
 
             migrationBuilder.DropTable(
                 name: "Overdrafts");

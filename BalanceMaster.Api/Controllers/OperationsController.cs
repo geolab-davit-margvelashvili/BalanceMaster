@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace BalanceMaster.Api.Controllers;
 
 [Route("api/operations")]
-[Authorize]
 [ApiController]
 public class OperationsController : ControllerBase
 {

@@ -14,4 +14,9 @@ public sealed class FileOperationRepository : FileRepositoryBase<Operation, Guid
     }
 
     protected override Task<Guid> GenerateIdAsync() => Task.FromResult(Guid.NewGuid());
+
+    public Task SaveChangesAsync()
+    {
+        throw new NotImplementedException();
+    }
 }

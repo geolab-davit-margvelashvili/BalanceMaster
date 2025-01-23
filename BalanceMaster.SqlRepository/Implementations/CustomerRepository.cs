@@ -8,10 +8,12 @@ namespace BalanceMaster.SqlRepository.Implementations;
 internal sealed class CustomerRepository : ICustomerRepository
 {
     private readonly AppDbContext _databaseContext;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CustomerRepository(AppDbContext databaseContext)
+    public CustomerRepository(AppDbContext databaseContext, IUnitOfWork unitOfWork)
     {
         _databaseContext = databaseContext;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Customer> GetByIdAsync(int id)
@@ -32,13 +34,16 @@ internal sealed class CustomerRepository : ICustomerRepository
 
     public async Task<int> CreateAsync(Customer customer)
     {
+        _unitOfWork.Start();
         await _databaseContext.Customers.AddAsync(customer);
-        await _databaseContext.SaveChangesAsync();
+        await _unitOfWork.CompleteAsync();
         return customer.Id;
     }
 
-    public Task UpdateAsync(Customer customer)
+    public async Task UpdateAsync(Customer customer)
     {
-        throw new NotImplementedException();
+        _unitOfWork.Start();
+        _databaseContext.Attach(customer);
+        await _unitOfWork.CompleteAsync();
     }
 }

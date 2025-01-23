@@ -18,4 +18,9 @@ public sealed class FileCustomerRepository : FileRepositoryBase<Customer, int>, 
 
     protected override Task<int> GenerateIdAsync() =>
         _sequenceProvider.GetNextInteger("customers");
+
+    public Task SaveChangesAsync()
+    {
+        throw new NotImplementedException();
+    }
 }

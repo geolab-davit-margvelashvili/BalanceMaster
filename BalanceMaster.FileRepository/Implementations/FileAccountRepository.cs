@@ -42,4 +42,9 @@ public sealed class FileAccountRepository : FileRepositoryBase<Account, int>, IA
 
     protected override Task<int> GenerateIdAsync() =>
         _sequenceProvider.GetNextInteger("accounts");
+
+    public Task SaveChangesAsync()
+    {
+        throw new NotImplementedException();
+    }
 }
