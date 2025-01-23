@@ -33,7 +33,9 @@ public sealed class OperationService : IOperationService
         var operation = command.ToOperation();
 
         await _accountRepository.UpdateAsync(account);
-        return await _operationRepository.CreateAsync(operation);
+        var operationId = await _operationRepository.CreateAsync(operation);
+
+        return operationId;
     }
 
     public async Task<Guid> ExecuteAsync(CreditCommand command)

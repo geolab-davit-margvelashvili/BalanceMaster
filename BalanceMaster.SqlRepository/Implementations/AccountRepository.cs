@@ -3,6 +3,7 @@ using BalanceMaster.Domain.Models;
 using BalanceMaster.Domain.Queries;
 using BalanceMaster.Service.Services.Abstractions;
 using BalanceMaster.SqlRepository.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace BalanceMaster.SqlRepository.Implementations;
 
@@ -21,9 +22,15 @@ internal sealed class AccountRepository : IAccountRepository
                ?? throw new ObjectNotFoundException(id.ToString(), nameof(Account));
     }
 
-    public Task<List<Account>> ListAsync(AccountQueryFilter? filter)
+    public async Task<List<Account>> ListAsync(AccountQueryFilter? filter)
     {
-        throw new NotImplementedException();
+        var result = await _databaseContext
+            .Accounts
+            .AsNoTracking()
+            .Where(x => x.Balance >= filter.MinBalance && x.Balance <= filter.MaxBalance)
+            .ToListAsync();
+
+        return result;
     }
 
     public async Task<Account?> GetByIdOrDefaultAsync(int id)
@@ -38,8 +45,9 @@ internal sealed class AccountRepository : IAccountRepository
         return account.Id;
     }
 
-    public Task UpdateAsync(Account account)
+    public async Task UpdateAsync(Account account)
     {
-        throw new NotImplementedException();
+        _databaseContext.Accounts.Attach(account);
+        await _databaseContext.SaveChangesAsync();
     }
 }

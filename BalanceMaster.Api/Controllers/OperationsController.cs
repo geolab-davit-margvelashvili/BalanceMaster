@@ -1,6 +1,7 @@
 ﻿using BalanceMaster.Domain.Abstractions;
 using BalanceMaster.Domain.Commands;
 using BalanceMaster.Domain.Models;
+using BalanceMaster.Service.Services.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,16 +13,18 @@ namespace BalanceMaster.Api.Controllers;
 public class OperationsController : ControllerBase
 {
     private readonly IOperationService _operationService;
+    private readonly IOperationRepository _operationRepository;
 
-    public OperationsController(IOperationService operationService)
+    public OperationsController(IOperationService operationService, IOperationRepository operationRepository)
     {
         _operationService = operationService;
+        _operationRepository = operationRepository;
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Operation>> GetOperation(Guid id)
     {
-        throw new NotImplementedException();
+        return await _operationRepository.GetByIdAsync(id);
     }
 
     [HttpPost("credit")]

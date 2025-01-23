@@ -38,7 +38,9 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
                 v => v.ToString(), // Convert enum to string for storage
                 v => (AccountStatus)Enum.Parse(typeof(AccountStatus), v));
 
-        builder.OwnsOne(a => a.Overdraft);
+        builder
+            .OwnsOne(a => a.Overdraft)
+            .ToTable("Overdrafts");
 
         // Indexes
         builder.HasIndex(a => a.Iban).IsUnique(); // Ensure IBAN is unique
