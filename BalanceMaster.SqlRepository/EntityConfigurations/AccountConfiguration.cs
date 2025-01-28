@@ -42,6 +42,9 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
             .OwnsOne(a => a.Overdraft)
             .ToTable("Overdrafts");
 
+        builder
+            .HasMany(x => x.Reserves);
+
         // Indexes
         builder.HasIndex(a => a.Iban).IsUnique(); // Ensure IBAN is unique
         builder.HasIndex(a => a.Currency);

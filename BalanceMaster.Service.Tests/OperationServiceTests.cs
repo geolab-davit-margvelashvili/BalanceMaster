@@ -11,11 +11,13 @@ public class OperationServiceTests
 {
     private readonly Mock<IAccountRepository> _accountRepository;
     private readonly Mock<IOperationRepository> _operationRepository;
+    private readonly Mock<IUnitOfWork> _unitOfWork;
 
     public OperationServiceTests()
     {
         _accountRepository = new Mock<IAccountRepository>();
         _operationRepository = new Mock<IOperationRepository>();
+        _unitOfWork = new Mock<IUnitOfWork>();
     }
 
     [Fact(DisplayName = "დებეტის ოპერაცია ანგარიშზე ბალანსს უნდა ამცირებდეს")]
@@ -29,14 +31,15 @@ public class OperationServiceTests
             iban: "Account1",
             currency: "GEL",
             balance: 100,
-            overdraft: null
+            overdraft: null,
+            reserves: null
         );
 
         _accountRepository
-            .Setup(x => x.GetByIdAsync(account.Id))
+            .Setup(x => x.GetByIdAsync(account.Id, true))
             .ReturnsAsync(account);
 
-        var service = new OperationService(_accountRepository.Object, _operationRepository.Object);
+        var service = new OperationService(_accountRepository.Object, _operationRepository.Object, _unitOfWork.Object);
         var debitCommand = new DebitCommand
         {
             Amount = 20,
@@ -67,13 +70,14 @@ public class OperationServiceTests
                 Amount = 100,
                 StartDate = DateTime.Today.AddDays(-1),
                 EndDate = DateTime.Today.AddDays(1)
-            }
+            },
+            reserves: null
         );
         _accountRepository
-            .Setup(x => x.GetByIdAsync(1))
+            .Setup(x => x.GetByIdAsync(1, true))
             .ReturnsAsync(account);
 
-        var service = new OperationService(_accountRepository.Object, _operationRepository.Object);
+        var service = new OperationService(_accountRepository.Object, _operationRepository.Object, _unitOfWork.Object);
         var debitCommand = new DebitCommand
         {
             Amount = 20,

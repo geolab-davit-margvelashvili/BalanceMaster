@@ -18,6 +18,11 @@ public sealed class FileAccountRepository : FileRepositoryBase<Account, int>, IA
         _sequenceProvider = sequenceProvider;
     }
 
+    public Task<Account> GetByIdAsync(int id, bool withReserves)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<List<Account>> ListAsync(AccountQueryFilter? filter)
     {
         if (filter is null)
@@ -38,6 +43,11 @@ public sealed class FileAccountRepository : FileRepositoryBase<Account, int>, IA
             accounts = accounts.Where(x => x.Balance <= filter.MaxBalance.Value);
 
         return accounts.ToList();
+    }
+
+    public Task<Account?> GetByIdOrDefaultAsync(int id, bool withReserves)
+    {
+        throw new NotImplementedException();
     }
 
     protected override Task<int> GenerateIdAsync() =>

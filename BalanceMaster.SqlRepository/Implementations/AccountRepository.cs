@@ -18,9 +18,9 @@ internal sealed class AccountRepository : IAccountRepository
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Account> GetByIdAsync(int id)
+    public async Task<Account> GetByIdAsync(int id, bool withReserves)
     {
-        return await GetByIdOrDefaultAsync(id)
+        return await GetByIdOrDefaultAsync(id, withReserves)
                ?? throw new ObjectNotFoundException(id.ToString(), nameof(Account));
     }
 
@@ -35,8 +35,30 @@ internal sealed class AccountRepository : IAccountRepository
         return result;
     }
 
-    public async Task<Account?> GetByIdOrDefaultAsync(int id)
+    public async Task<Account?> GetByIdOrDefaultAsync(int id, bool withReserves)
     {
+        if (withReserves)
+        {
+            return await _databaseContext
+                .Accounts
+                .AsNoTracking()
+                .Include(x => x.Reserves)
+                .FirstOrDefaultAsync(account => account.Id == id);
+        }
+
+        return await _databaseContext.Accounts.FindAsync(id);
+    }
+
+    public async Task<Account?> GetByIdForUpdateAsync(int id, bool withReserves)
+    {
+        if (withReserves)
+        {
+            return await _databaseContext
+                .Accounts
+                .Include(x => x.Reserves)
+                .FirstOrDefaultAsync(account => account.Id == id);
+        }
+
         return await _databaseContext.Accounts.FindAsync(id);
     }
 

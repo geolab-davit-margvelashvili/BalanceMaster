@@ -24,11 +24,14 @@ public class
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Account>> GetAccount([FromRoute(Name = "id")] int accountId, [FromQuery(Name = "active")] bool isActive)
+    public async Task<ActionResult<Account>> GetAccount(
+        [FromRoute(Name = "id")] int accountId,
+        [FromQuery(Name = "active")] bool isActive,
+        [FromQuery(Name = "withReserves")] bool withReserves)
     {
         _logger.LogInformation("Searching account with id: {AccountId}", accountId);
 
-        var account = await _repository.GetByIdOrDefaultAsync(accountId);
+        var account = await _repository.GetByIdOrDefaultAsync(accountId, withReserves);
         if (account is not null)
         {
             _logger.LogDebug("Account found: {@Account}", account);
@@ -54,6 +57,16 @@ public class
     public async Task<ActionResult> CloseAccount([FromRoute] int id)
     {
         await _accountService.ExecuteAsync(new CloseAccountCommand { Id = id });
+        return NoContent();
+    }
+
+    [HttpPost("{id}/reserves")]
+    public async Task<ActionResult> AddReserve([FromRoute(Name = "id")] int accountId, [FromBody] AddReserveCommand command)
+    {
+        if (accountId != command.AccountId)
+            return BadRequest("Account id mismatch");
+
+        await _accountService.ExecuteAsync(command);
         return NoContent();
     }
 }

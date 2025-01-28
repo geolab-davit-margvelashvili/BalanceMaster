@@ -21,5 +21,6 @@ public sealed class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new CustomerConfiguration());
         modelBuilder.ApplyConfiguration(new AccountConfiguration());
         modelBuilder.ApplyConfiguration(new OperationConfiguration());
+        modelBuilder.ApplyConfiguration(new ReserveConfiguration());
     }
 }

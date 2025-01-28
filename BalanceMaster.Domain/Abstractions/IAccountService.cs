@@ -7,4 +7,6 @@ public interface IAccountService
     Task<int> ExecuteAsync(OpenAccountCommand command);
 
     Task ExecuteAsync(CloseAccountCommand command);
+
+    Task ExecuteAsync(AddReserveCommand command);
 }

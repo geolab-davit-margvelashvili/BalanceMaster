@@ -15,6 +15,8 @@ public class Account : DomainEntity<int>
 
     public Overdraft? Overdraft { get; private set; }
 
+    public List<Reserve>? Reserves { get; private set; }
+
     private Account()
     {
         Currency = string.Empty;
@@ -22,7 +24,7 @@ public class Account : DomainEntity<int>
         Status = AccountStatus.Open;
     }
 
-    public Account(int id, int customerId, string iban, string currency, decimal balance, Overdraft? overdraft)
+    public Account(int id, int customerId, string iban, string currency, decimal balance, Overdraft? overdraft, List<Reserve>? reserves)
     {
         Id = id;
         Iban = iban;
@@ -31,6 +33,7 @@ public class Account : DomainEntity<int>
         CustomerId = customerId;
         Overdraft = overdraft;
         Status = AccountStatus.Open;
+        Reserves = reserves;
     }
 
     public void Debit(decimal amount)
@@ -81,5 +84,13 @@ public class Account : DomainEntity<int>
 
         CloseOverdraft();
         Status = AccountStatus.Closed;
+    }
+
+    public void AddReserve(Reserve reserve)
+    {
+        if (Reserves is null)
+            Reserves = new List<Reserve>(1);
+
+        Reserves.Add(reserve);
     }
 }

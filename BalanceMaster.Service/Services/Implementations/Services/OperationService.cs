@@ -23,7 +23,7 @@ public sealed class OperationService : IOperationService
     {
         command.Validate();
 
-        var account = await _accountRepository.GetByIdAsync(command.AccountId);
+        var account = await _accountRepository.GetByIdAsync(command.AccountId, true);
 
         if (account.GetBalance() < command.Amount)
         {
@@ -44,7 +44,7 @@ public sealed class OperationService : IOperationService
     {
         command.Validate();
 
-        var account = await _accountRepository.GetByIdAsync(command.AccountId);
+        var account = await _accountRepository.GetByIdAsync(command.AccountId, true);
 
         account.Credit(command.Amount);
 
