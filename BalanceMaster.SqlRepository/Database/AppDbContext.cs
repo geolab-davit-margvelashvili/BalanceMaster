@@ -1,10 +1,12 @@
 ﻿using BalanceMaster.Domain.Models;
 using BalanceMaster.SqlRepository.EntityConfigurations;
+using BalanceMaster.SqlRepository.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BalanceMaster.SqlRepository.Database;
 
-public sealed class AppDbContext : DbContext
+public sealed class AppDbContext : IdentityDbContext<ApplicationUser>
 {
     public AppDbContext(DbContextOptions options) : base(options)
     {
@@ -22,5 +24,8 @@ public sealed class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new AccountConfiguration());
         modelBuilder.ApplyConfiguration(new OperationConfiguration());
         modelBuilder.ApplyConfiguration(new ReserveConfiguration());
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
+
+        base.OnModelCreating(modelBuilder);
     }
 }
