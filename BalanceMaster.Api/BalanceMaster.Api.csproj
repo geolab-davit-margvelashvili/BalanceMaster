@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
@@ -24,6 +24,10 @@
     <ProjectReference Include="..\BalanceMaster.FileRepository\BalanceMaster.FileRepository.csproj" />
     <ProjectReference Include="..\BalanceMaster.Service\BalanceMaster.Service.csproj" />
     <ProjectReference Include="..\BalanceMaster.SqlRepository\BalanceMaster.SqlRepository.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="logs\" />
   </ItemGroup>
 
 </Project>
