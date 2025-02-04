@@ -15,33 +15,52 @@ public class UsersController : ControllerBase
 {
     private readonly IConfiguration _configuration;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly SignInManager<ApplicationUser> _singInManager;
 
-    public UsersController(IConfiguration configuration, UserManager<ApplicationUser> userManager)
+    public UsersController(IConfiguration configuration, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> singInManager)
     {
         _configuration = configuration;
         _userManager = userManager;
+        _singInManager = singInManager;
     }
 
     [HttpPost("authenticate")]
     public async Task<ActionResult<string>> AuthenticateAsync([FromBody] LoginRequest request)
     {
-        // Step 1: Validate the username/password
         var user = await _userManager.FindByEmailAsync(request.Email);
         if (user is null)
         {
-            return Unauthorized();
+            return NotFound();
         }
 
-        if (!await _userManager.CheckPasswordAsync(user, request.Password))
+        var result = await _singInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: true);
+        if (result.Succeeded)
         {
-            return Unauthorized();
+            return Ok(new
+            {
+                accessToken = GenerateJwt(user)
+            });
         }
 
-        // Step 2: create token
-        return Ok(new
+        return Unauthorized(result);
+    }
+
+    [HttpGet("confirm-email")]
+    public async Task<ActionResult> ConfirmEmailAsync([FromQuery] string email, [FromQuery] string code)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user is null)
         {
-            accessToken = GenerateJwt(user)
-        });
+            return NotFound();
+        }
+
+        var result = await _userManager.ConfirmEmailAsync(user, code);
+        if (result.Succeeded)
+        {
+            return Ok("Mail confirmed!");
+        }
+
+        return Unauthorized(result);
     }
 
     [HttpPost("register")]
@@ -56,6 +75,21 @@ public class UsersController : ControllerBase
         var result = await _userManager.CreateAsync(user, request.Password);
         if (result.Succeeded)
         {
+            if (_userManager.Options.SignIn.RequireConfirmedEmail)
+            {
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                var uri = new UriBuilder("https", "localhost", 7017, $"api/users/confirm-email")
+                {
+                    Query = $"email={user.Email}&code={code}"
+                };
+
+                return Ok(new
+                {
+                    code = uri.ToString()
+                });
+            }
+
             return Ok(new
             {
                 accessToken = GenerateJwt(user)
