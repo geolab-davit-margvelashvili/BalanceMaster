@@ -1,3 +1,4 @@
+using BalanceMaster.Api;
 using BalanceMaster.Api.Extensions;
 using BalanceMaster.Api.Middlewares;
 using BalanceMaster.SqlRepository.Database;
@@ -28,8 +29,30 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services
-    .AddIdentity<ApplicationUser, IdentityRole>()
+    .AddIdentity<ApplicationUser, IdentityRole>(options =>
+    {
+        options.Password = new PasswordOptions
+        {
+            RequireDigit = true,
+            RequireLowercase = true,
+            RequireNonAlphanumeric = true,
+            RequireUppercase = true,
+            RequiredLength = 8,
+            RequiredUniqueChars = 3,
+        };
+
+        options.Lockout = new LockoutOptions
+        {
+            AllowedForNewUsers = true,
+            DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1),
+            MaxFailedAccessAttempts = 3,
+        };
+
+        options.SignIn.RequireConfirmedAccount = true;
+        options.SignIn.RequireConfirmedEmail = true;
+    })
     .AddEntityFrameworkStores<AppDbContext>()
+    .AddTokenProvider<PasswordTokenProvider<ApplicationUser>>("ResetPassword")
     .AddDefaultTokenProviders();
 
 var app = builder.Build();
