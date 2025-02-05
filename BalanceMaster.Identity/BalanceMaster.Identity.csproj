@@ -16,10 +16,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Responses\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <ProjectReference Include="..\BalanceMaster.MessageSender.Abstractions\BalanceMaster.MessageSender.Abstractions.csproj" />
 	</ItemGroup>
 

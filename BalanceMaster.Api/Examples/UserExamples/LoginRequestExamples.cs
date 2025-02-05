@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.Data;
+﻿using BalanceMaster.Identity.Requests;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace BalanceMaster.Api.Examples.UserExamples;
@@ -9,7 +9,7 @@ public sealed class LoginRequestExamples : IMultipleExamplesProvider<LoginReques
     {
         yield return SwaggerExample.Create("Login", new LoginRequest
         {
-            Email = "test@mail.com",
+            Email = "test@yopmail.com",
             Password = "P@$$w0rd"
         });
     }
