@@ -1,9 +1,9 @@
 ﻿using BalanceMaster.Domain.Exceptions;
-using Microsoft.AspNetCore.Http;
+using BalanceMaster.Identity.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Text.Json;
+using UnauthorizedAccessException = System.UnauthorizedAccessException;
 
 namespace BalanceMaster.Api.Middlewares;
 
@@ -49,7 +49,35 @@ public class ErrorHandlingMiddleware
                 problemDetails.Title = "Unauthorized access.";
                 problemDetails.Status = (int)HttpStatusCode.Unauthorized;
                 problemDetails.Type = nameof(UnauthorizedAccessException);
-               break;
+                break;
+
+            case Identity.Exceptions.UnauthorizedAccessException:
+                problemDetails.Title = exception.Message;
+                problemDetails.Status = (int)HttpStatusCode.Unauthorized;
+                problemDetails.Type = nameof(UnauthorizedAccessException);
+                break;
+
+            case AuthenticationExceptions:
+                problemDetails.Title = exception.Message;
+                problemDetails.Status = (int)HttpStatusCode.Unauthorized;
+                problemDetails.Type = nameof(AuthenticationExceptions);
+                break;
+
+            case ChangePasswordException ex:
+                problemDetails.Title = exception.Message;
+                problemDetails.Status = (int)HttpStatusCode.InternalServerError;
+                problemDetails.Type = nameof(ChangePasswordException);
+                problemDetails.Extensions = ex.Errors?.ToDictionary(x => x.Code, object? (x) => x.Description) ??
+                                            problemDetails.Extensions;
+                break;
+
+            case IdentityException ex:
+                problemDetails.Title = exception.Message;
+                problemDetails.Status = (int)HttpStatusCode.BadRequest;
+                problemDetails.Type = nameof(IdentityException);
+                problemDetails.Extensions = ex.Errors?.ToDictionary(x => x.Code, object? (x) => x.Description) ??
+                                            problemDetails.Extensions;
+                break;
 
             case ArgumentNullException:
             case ArgumentException:

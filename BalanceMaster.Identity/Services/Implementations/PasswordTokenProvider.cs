@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace BalanceMaster.Api;
+namespace BalanceMaster.Identity.Services.Implementations;
 
 public sealed class PasswordTokenProvider<TUser> : TotpSecurityStampBasedTokenProvider<TUser> where TUser : IdentityUser
 {

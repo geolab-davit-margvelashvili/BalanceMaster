@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace BalanceMaster.SqlRepository.Models;
+namespace BalanceMaster.Identity.Models;
 
 public class ApplicationUser : IdentityUser
 {

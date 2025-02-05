@@ -1,6 +1,6 @@
 ﻿using BalanceMaster.Domain.Models;
+using BalanceMaster.Identity.Models;
 using BalanceMaster.SqlRepository.EntityConfigurations;
-using BalanceMaster.SqlRepository.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
