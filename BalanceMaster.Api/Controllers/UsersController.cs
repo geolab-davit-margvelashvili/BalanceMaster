@@ -1,11 +1,6 @@
-﻿using BalanceMaster.Api.Extensions;
-using BalanceMaster.SqlRepository.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.Data;
+﻿using BalanceMaster.Identity.Requests;
+using BalanceMaster.Identity.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace BalanceMaster.Api.Controllers;
 
@@ -13,111 +8,67 @@ namespace BalanceMaster.Api.Controllers;
 [ApiController]
 public class UsersController : ControllerBase
 {
-    private readonly IConfiguration _configuration;
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IIdentityService _identityService;
 
-    public UsersController(IConfiguration configuration, UserManager<ApplicationUser> userManager)
+    public UsersController(IIdentityService identityService)
     {
-        _configuration = configuration;
-        _userManager = userManager;
+        _identityService = identityService;
     }
 
     [HttpPost("authenticate")]
     public async Task<ActionResult<string>> AuthenticateAsync([FromBody] LoginRequest request)
     {
-        // Step 1: Validate the username/password
-        var user = await _userManager.FindByEmailAsync(request.Email);
-        if (user is null)
-        {
-            return Unauthorized();
-        }
-
-        if (!await _userManager.CheckPasswordAsync(user, request.Password))
-        {
-            return Unauthorized();
-        }
-
-        // Step 2: create token
         return Ok(new
         {
-            accessToken = GenerateJwt(user)
+            accessToken = await _identityService.AuthenticateAsync(request)
         });
     }
 
     [HttpPost("register")]
     public async Task<ActionResult> RegisterAsync([FromBody] RegisterRequest request)
     {
-        var user = new ApplicationUser
-        {
-            UserName = request.Email,
-            Email = request.Email,
-        };
+        var accessToken = await _identityService.RegisterAsync(request);
 
-        var result = await _userManager.CreateAsync(user, request.Password);
-        if (result.Succeeded)
+        if (accessToken is not null)
         {
             return Ok(new
             {
-                accessToken = GenerateJwt(user)
+                accessToken
             });
         }
 
-        return BadRequest(result.Errors);
+        return Ok();
+    }
+
+    [HttpPost("confirm-email")]
+    public async Task<ActionResult> ConfirmEmail([FromBody] ConfirmEmailRequest request)
+    {
+        await _identityService.ConfirmEmail(request);
+        return Ok();
     }
 
     [HttpPost("change-password")]
     public async Task<ActionResult> ChangePasswordAsync([FromBody] ChangePasswordRequest request)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
-        if (user is null)
-        {
-            return Unauthorized();
-        }
+        var accessToken = await _identityService.ChangePasswordAsync(request);
 
-        if (!await _userManager.CheckPasswordAsync(user, request.CurrentPassword))
+        return Ok(new
         {
-            return Unauthorized();
-        }
-
-        var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
-        if (result.Succeeded)
-        {
-            return Ok(new
-            {
-                accessToken = GenerateJwt(user)
-            });
-        }
-
-        return BadRequest(result.Errors);
+            accessToken
+        });
     }
 
-    private string GenerateJwt(ApplicationUser user)
+    [HttpPost("reset-password")]
+    public async Task<ActionResult> ResetPasswordAsync([FromBody] ResetPasswordRequest request)
     {
-        var securityKey = _configuration.GetIssuerSigningKey();
-        var signInCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-        var claims = new List<Claim>
-        {
-            new ("sub", user.Id),
-            new ("preferred_username", user.UserName)
-        };
-
-        var jwtSecurityToken = new JwtSecurityToken(
-            issuer: _configuration.GetJwtIssuer(),
-            audience: _configuration.GetJwtAudience(),
-            claims,
-            notBefore: DateTime.UtcNow,
-            expires: DateTime.UtcNow.AddSeconds(10),
-            signInCredentials);
-
-        var tokenToReturn = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-        return tokenToReturn;
+        await _identityService.ResetPasswordAsync(request);
+        return Ok();
     }
-}
 
-public class ChangePasswordRequest
-{
-    public required string Email { get; set; }
-    public required string CurrentPassword { get; set; }
-    public required string NewPassword { get; set; }
+    [HttpPost("new-password")]
+    public async Task<ActionResult> NewPasswordAsync([FromBody] NewPasswordRequest request)
+    {
+        await _identityService.NewPasswordAsync(request);
+        return Ok();
+    }
 }

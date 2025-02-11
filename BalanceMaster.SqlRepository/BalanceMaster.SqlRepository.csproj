@@ -14,7 +14,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BalanceMaster.Domain\BalanceMaster.Domain.csproj" />
+    <ProjectReference Include="..\BalanceMaster.Identity\BalanceMaster.Identity.csproj" />
     <ProjectReference Include="..\BalanceMaster.Service\BalanceMaster.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>

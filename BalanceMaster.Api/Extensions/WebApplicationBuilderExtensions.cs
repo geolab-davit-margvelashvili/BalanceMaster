@@ -1,6 +1,11 @@
 ﻿using BalanceMaster.FileRepository.Models;
+using BalanceMaster.Identity.Extensions;
+using BalanceMaster.MessageSender.Extensions;
 using BalanceMaster.Service.Extensions;
+using BalanceMaster.SqlRepository.Database;
 using BalanceMaster.SqlRepository.Extensions;
+using Microsoft.EntityFrameworkCore;
+using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 
@@ -37,6 +42,36 @@ public static class WebApplicationBuilderExtensions
     public static WebApplicationBuilder AddJwtAuthentication(this WebApplicationBuilder builder)
     {
         builder.Services.AddJwtBearerAuthentication(builder.Configuration);
+        return builder;
+    }
+
+    public static WebApplicationBuilder AddSerilog(this WebApplicationBuilder builder)
+    {
+        Log.Logger = new LoggerConfiguration()
+            .ReadFrom
+            .Configuration(builder.Configuration)
+            .CreateLogger();
+
+        builder.Host.UseSerilog(); // Use Serilog as the logging provider
+
+        return builder;
+    }
+
+    public static WebApplicationBuilder AddDatabase(this WebApplicationBuilder builder)
+    {
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+
+        return builder;
+    }
+
+    public static WebApplicationBuilder AddIdentity(this WebApplicationBuilder builder)
+    {
+        builder.Services
+            .AddMailSender(builder.Configuration)
+            .AddIdentityServices(builder.Configuration)
+            .AddEntityFrameworkStores<AppDbContext>();
+
         return builder;
     }
 
