@@ -9,8 +9,7 @@ namespace BalanceMaster.Api.Controllers;
 
 [Route("api/accounts")]
 [ApiController]
-public class
-    AccountsController : ControllerBase
+public class AccountsController : ControllerBase
 {
     private readonly IAccountService _accountService;
     private readonly IAccountRepository _repository;

@@ -5,7 +5,6 @@ using BalanceMaster.Identity.Services.Abstractions;
 using BalanceMaster.MessageSender.Abstractions.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using System.Security.Authentication;
 
 namespace BalanceMaster.Identity.Services.Implementations;
 
@@ -79,13 +78,13 @@ public sealed class IdentityService : IIdentityService
         var user = await _userManager.FindByEmailAsync(request.Email);
         if (user is null)
         {
-            throw new AuthenticationExceptions();
+            throw new AuthenticationException();
         }
 
         var isValid = await _userManager.VerifyTwoFactorTokenAsync(user, "Email", request.Otp);
         if (!isValid)
         {
-            throw new AuthenticationExceptions();
+            throw new AuthenticationException();
         }
 
         user.EmailConfirmed = true;
@@ -97,12 +96,12 @@ public sealed class IdentityService : IIdentityService
         var user = await _userManager.FindByEmailAsync(request.Email);
         if (user is null)
         {
-            throw new AuthenticationExceptions();
+            throw new AuthenticationException();
         }
 
         if (!await _userManager.CheckPasswordAsync(user, request.CurrentPassword))
         {
-            throw new AuthenticationExceptions();
+            throw new AuthenticationException();
         }
 
         var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
@@ -119,7 +118,7 @@ public sealed class IdentityService : IIdentityService
         var user = await _userManager.FindByEmailAsync(request.Email);
         if (user is null)
         {
-            throw new AuthenticationExceptions();
+            throw new AuthenticationException();
         }
 
         var otp = await _userManager.GenerateTwoFactorTokenAsync(user, "ResetPassword");
@@ -131,13 +130,13 @@ public sealed class IdentityService : IIdentityService
         var user = await _userManager.FindByEmailAsync(request.Email);
         if (user is null)
         {
-            throw new AuthenticationExceptions();
+            throw new AuthenticationException();
         }
 
         var isValid = await _userManager.VerifyTwoFactorTokenAsync(user, "ResetPassword", request.Otp);
         if (!isValid)
         {
-            throw new AuthenticationExceptions();
+            throw new AuthenticationException();
         }
 
         if (!string.IsNullOrEmpty(user.PasswordHash))

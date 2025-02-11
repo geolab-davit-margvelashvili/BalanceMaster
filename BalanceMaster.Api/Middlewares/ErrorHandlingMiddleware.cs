@@ -57,10 +57,10 @@ public class ErrorHandlingMiddleware
                 problemDetails.Type = nameof(UnauthorizedAccessException);
                 break;
 
-            case AuthenticationExceptions:
+            case AuthenticationException:
                 problemDetails.Title = exception.Message;
                 problemDetails.Status = (int)HttpStatusCode.Unauthorized;
-                problemDetails.Type = nameof(AuthenticationExceptions);
+                problemDetails.Type = nameof(AuthenticationException);
                 break;
 
             case ChangePasswordException ex:
