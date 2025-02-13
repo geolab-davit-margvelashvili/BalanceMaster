@@ -1,5 +1,6 @@
 ﻿using BalanceMaster.Identity.Models;
 using BalanceMaster.Identity.Services.Abstractions;
+using BalanceMaster.Service.Services.Abstractions;
 using BalanceMaster.SqlRepository.Database;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,9 +10,12 @@ internal sealed class TokenRepository : ITokenRepository
 {
     private readonly AppDbContext _databaseContext;
 
-    public TokenRepository(AppDbContext databaseContext)
+    private readonly IUnitOfWork _unitOfWork;
+
+    public TokenRepository(AppDbContext databaseContext, IUnitOfWork unitOfWork)
     {
         _databaseContext = databaseContext;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<RefreshToken?> GetRefreshTokenAsync(string token)
@@ -32,19 +36,23 @@ internal sealed class TokenRepository : ITokenRepository
 
     public async Task AddRefreshTokenAsync(RefreshToken refreshToken)
     {
+        _unitOfWork.Start();
+
         await _databaseContext
             .RefreshTokens
             .AddAsync(refreshToken);
 
-        await _databaseContext.SaveChangesAsync();
+        await _unitOfWork.CompleteAsync();
     }
 
     public async Task UpdateAsync(RefreshToken refreshToken)
     {
+        _unitOfWork.Start();
+
         _databaseContext
             .RefreshTokens
             .Attach(refreshToken);
 
-        await _databaseContext.SaveChangesAsync();
+        await _unitOfWork.CompleteAsync();
     }
 }

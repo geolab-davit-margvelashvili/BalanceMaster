@@ -1,5 +1,4 @@
-﻿using BalanceMaster.FileRepository.Models;
-using BalanceMaster.Identity.Extensions;
+﻿using BalanceMaster.Identity.Extensions;
 using BalanceMaster.MessageSender.Extensions;
 using BalanceMaster.Service.Extensions;
 using BalanceMaster.SqlRepository.Database;
@@ -54,13 +53,6 @@ public static class WebApplicationBuilderExtensions
     public static WebApplicationBuilder AddReloadableAppSettings(this WebApplicationBuilder builder)
     {
         builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-        return builder;
-    }
-
-    public static WebApplicationBuilder ConfigureFileStorageOptions(this WebApplicationBuilder builder)
-    {
-        builder.Services.Configure<FileStorageOptions>(builder.Configuration.GetSection("FileStorageOptions"));
-
         return builder;
     }
 

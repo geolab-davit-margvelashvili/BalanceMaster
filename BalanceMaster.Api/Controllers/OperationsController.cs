@@ -1,4 +1,5 @@
-﻿using BalanceMaster.Domain.Abstractions;
+﻿using BalanceMaster.Api.Models;
+using BalanceMaster.Domain.Abstractions;
 using BalanceMaster.Domain.Commands;
 using BalanceMaster.Domain.Models;
 using BalanceMaster.Service.Services.Abstractions;
@@ -24,6 +25,43 @@ public class OperationsController : ControllerBase
     public async Task<ActionResult<Operation>> GetOperation(Guid id)
     {
         return await _operationRepository.GetByIdAsync(id);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult> ListOperation([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    {
+        var pagedData = await _operationRepository.ListAsync(page, pageSize);
+
+        var response = new ApiPagedResponse<Operation>
+        {
+            Data = pagedData.Data.ToList(),
+            Meta = new Meta
+            {
+                Page = pagedData.Page,
+                PageSize = pagedData.PageSize,
+                TotalItems = pagedData.TotalItems,
+                TotalPages = pagedData.TotalPages
+            },
+            Links = new Links
+            {
+                Self = CreateLink(page, pageSize),
+                Next = page >= pagedData.TotalPages ? null : CreateLink(page + 1, pageSize),
+                Prev = page == 1 ? null : CreateLink(page - 1, pageSize)
+            }
+        };
+
+        return Ok(response);
+    }
+
+    private string CreateLink(int page, int pageSize)
+    {
+        var builder = new UriBuilder(Request.Scheme, Request.Host.Host, Request.Host.Port ?? (Request.Scheme == "https" ? 443 : 80))
+        {
+            Path = Request.Path.ToUriComponent(),
+            Query = $"page={page}&pageSize={pageSize}",
+        };
+
+        return builder.ToString();
     }
 
     [Authorize]

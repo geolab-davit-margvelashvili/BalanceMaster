@@ -2,6 +2,7 @@
 using BalanceMaster.Domain.Models;
 using BalanceMaster.Service.Services.Abstractions;
 using BalanceMaster.SqlRepository.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace BalanceMaster.SqlRepository.Implementations;
 
@@ -28,6 +29,29 @@ internal sealed class OperationRepository : IOperationRepository
     {
         return await GetByIdOrDefaultAsync(id)
                ?? throw new ObjectNotFoundException(id.ToString(), nameof(Operation));
+    }
+
+    public async Task<PagedResponse<Operation>> ListAsync(int page, int pageSize)
+    {
+        var data = await _appDbContext
+            .Operations
+            .AsNoTracking()
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        var total = await _appDbContext.Operations.CountAsync();
+
+        var response = new PagedResponse<Operation>
+        {
+            Data = data,
+            Page = page,
+            PageSize = pageSize,
+            TotalItems = total,
+            TotalPages = (int)Math.Ceiling((double)total / pageSize)
+        };
+
+        return response;
     }
 
     public async Task<Operation?> GetByIdOrDefaultAsync(Guid id)

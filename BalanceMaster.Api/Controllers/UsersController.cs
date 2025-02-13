@@ -57,7 +57,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("refresh-token")]
-    public async Task<ActionResult<LoginResponse>> NewPasswordAsync([FromBody] RefreshTokenRequest request)
+    public async Task<ActionResult<LoginResponse>> RefreshTokenAsync([FromBody] RefreshTokenRequest request)
     {
         return Ok(await _tokenService.RefreshTokenAsync(request.RefreshToken));
     }

@@ -10,7 +10,6 @@ builder
     .AddSwaggerDocumentation()
     .AddApplicationServices()
     .AddReloadableAppSettings()
-    .ConfigureFileStorageOptions()
     .AddSerilog()
     .AddDatabase()
     .AddIdentity();
