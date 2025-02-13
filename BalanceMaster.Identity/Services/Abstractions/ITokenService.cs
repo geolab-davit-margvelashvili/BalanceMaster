@@ -4,5 +4,9 @@ namespace BalanceMaster.Identity.Services.Abstractions;
 
 public interface ITokenService
 {
-    string GenerateTokenFor(ApplicationUser user);
+    string GenerateAccessTokenFor(ApplicationUser user);
+
+    Task<string> GenerateRefreshTokenAsync(ApplicationUser user);
+
+    Task<string> RefreshTokenAsync(string token);
 }

@@ -1,4 +1,5 @@
-﻿using BalanceMaster.Identity.Models;
+﻿using BalanceMaster.Identity.Exceptions;
+using BalanceMaster.Identity.Models;
 using BalanceMaster.Identity.Services.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -10,13 +11,15 @@ namespace BalanceMaster.Identity.Services.Implementations;
 public sealed class JwtTokenService : ITokenService
 {
     private readonly TokenServiceOptions _options;
+    private readonly ITokenRepository _tokenRepository;
 
-    public JwtTokenService(IOptions<TokenServiceOptions> options)
+    public JwtTokenService(IOptions<TokenServiceOptions> options, ITokenRepository tokenRepository)
     {
         _options = options.Value;
+        _tokenRepository = tokenRepository;
     }
 
-    public string GenerateTokenFor(ApplicationUser user)
+    public string GenerateAccessTokenFor(ApplicationUser user)
     {
         var signInCredentials = new SigningCredentials(_options.GetIssuerSigningKey(), SecurityAlgorithms.HmacSha256);
 
@@ -31,9 +34,35 @@ public sealed class JwtTokenService : ITokenService
             audience: _options.Audience,
             claims,
             notBefore: DateTime.UtcNow,
-            expires: DateTime.UtcNow.AddMinutes(5),
+            expires: DateTime.UtcNow.AddMinutes(1),
             signInCredentials);
 
         return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+    }
+
+    public async Task<string> GenerateRefreshTokenAsync(ApplicationUser user)
+    {
+        var refreshToken = RefreshToken.CreateNew(user.Id);
+        await _tokenRepository.AddRefreshTokenAsync(refreshToken);
+        return refreshToken.Value;
+    }
+
+    public async Task<string> RefreshTokenAsync(string token)
+    {
+        var refreshToken = await _tokenRepository.GetRefreshTokenAsync(token);
+        if (refreshToken is null)
+        {
+            throw new AuthenticationException("Invalid refresh token");
+        }
+
+        if (refreshToken.ExpiresAt <= DateTime.Now)
+        {
+            throw new AuthenticationException("Refresh token has expired");
+        }
+
+        refreshToken.Refresh();
+        await _tokenRepository.UpdateAsync(refreshToken);
+
+        return refreshToken.Value;
     }
 }

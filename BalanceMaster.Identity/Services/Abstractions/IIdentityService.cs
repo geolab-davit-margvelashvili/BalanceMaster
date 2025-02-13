@@ -1,18 +1,19 @@
 ﻿using BalanceMaster.Identity.Requests;
+using BalanceMaster.Identity.Responses;
 
 namespace BalanceMaster.Identity.Services.Abstractions;
 
 public interface IIdentityService
 {
-    Task<string> AuthenticateAsync(LoginRequest request);
+    Task<LoginResponse> AuthenticateAsync(LoginRequest request);
 
-    Task<string?> RegisterAsync(RegisterRequest request);
+    Task<LoginResponse?> RegisterAsync(RegisterRequest request);
 
-    Task ConfirmEmail(ConfirmEmailRequest request);
+    Task ConfirmEmailAsync(ConfirmEmailRequest request);
 
-    Task<string> ChangePasswordAsync(ChangePasswordRequest request);
+    Task<LoginResponse> ChangePasswordAsync(ChangePasswordRequest request);
 
     Task ResetPasswordAsync(ResetPasswordRequest request);
 
-    Task NewPasswordAsync(NewPasswordRequest request);
+    Task<LoginResponse> NewPasswordAsync(NewPasswordRequest request);
 }

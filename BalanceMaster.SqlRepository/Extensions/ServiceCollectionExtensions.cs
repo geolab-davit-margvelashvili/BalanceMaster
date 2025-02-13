@@ -1,4 +1,5 @@
-﻿using BalanceMaster.Service.Services.Abstractions;
+﻿using BalanceMaster.Identity.Services.Abstractions;
+using BalanceMaster.Service.Services.Abstractions;
 using BalanceMaster.SqlRepository.Implementations;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,6 +10,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddSqlRepositories(this IServiceCollection services) => services
             .AddScoped<IUnitOfWork, UnitOfWork>()
             .AddScoped<ICustomerRepository, CustomerRepository>()
+            .AddScoped<ITokenRepository, TokenRepository>()
             .AddScoped<IAccountRepository, AccountRepository>()
             .AddScoped<IOperationRepository, OperationRepository>();
 }

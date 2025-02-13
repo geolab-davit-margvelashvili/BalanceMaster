@@ -26,6 +26,7 @@ public class OperationsController : ControllerBase
         return await _operationRepository.GetByIdAsync(id);
     }
 
+    [Authorize]
     [HttpPost("credit")]
     public async Task<ActionResult> Credit(CreditCommand command)
     {

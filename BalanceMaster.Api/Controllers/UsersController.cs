@@ -1,4 +1,5 @@
 ﻿using BalanceMaster.Identity.Requests;
+using BalanceMaster.Identity.Responses;
 using BalanceMaster.Identity.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,53 +10,37 @@ namespace BalanceMaster.Api.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly IIdentityService _identityService;
+    private readonly ITokenService _tokenService;
 
-    public UsersController(IIdentityService identityService)
+    public UsersController(IIdentityService identityService, ITokenService tokenService)
     {
         _identityService = identityService;
+        _tokenService = tokenService;
     }
 
     [HttpPost("authenticate")]
-    public async Task<ActionResult<string>> AuthenticateAsync([FromBody] LoginRequest request)
+    public async Task<ActionResult<LoginResponse>> AuthenticateAsync([FromBody] LoginRequest request)
     {
-        return Ok(new
-        {
-            accessToken = await _identityService.AuthenticateAsync(request)
-        });
+        return Ok(await _identityService.AuthenticateAsync(request));
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult> RegisterAsync([FromBody] RegisterRequest request)
+    public async Task<ActionResult<LoginResponse?>> RegisterAsync([FromBody] RegisterRequest request)
     {
-        var accessToken = await _identityService.RegisterAsync(request);
-
-        if (accessToken is not null)
-        {
-            return Ok(new
-            {
-                accessToken
-            });
-        }
-
-        return Ok();
+        return Ok(await _identityService.RegisterAsync(request));
     }
 
     [HttpPost("confirm-email")]
     public async Task<ActionResult> ConfirmEmail([FromBody] ConfirmEmailRequest request)
     {
-        await _identityService.ConfirmEmail(request);
+        await _identityService.ConfirmEmailAsync(request);
         return Ok();
     }
 
     [HttpPost("change-password")]
-    public async Task<ActionResult> ChangePasswordAsync([FromBody] ChangePasswordRequest request)
+    public async Task<ActionResult<LoginResponse>> ChangePasswordAsync([FromBody] ChangePasswordRequest request)
     {
-        var accessToken = await _identityService.ChangePasswordAsync(request);
-
-        return Ok(new
-        {
-            accessToken
-        });
+        return Ok(await _identityService.ChangePasswordAsync(request));
     }
 
     [HttpPost("reset-password")]
@@ -66,9 +51,14 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("new-password")]
-    public async Task<ActionResult> NewPasswordAsync([FromBody] NewPasswordRequest request)
+    public async Task<ActionResult<LoginResponse>> NewPasswordAsync([FromBody] NewPasswordRequest request)
     {
-        await _identityService.NewPasswordAsync(request);
-        return Ok();
+        return Ok(await _identityService.NewPasswordAsync(request));
+    }
+
+    [HttpPost("refresh-token")]
+    public async Task<ActionResult<LoginResponse>> NewPasswordAsync([FromBody] RefreshTokenRequest request)
+    {
+        return Ok(await _tokenService.RefreshTokenAsync(request.RefreshToken));
     }
 }

@@ -1,6 +1,7 @@
 ﻿using BalanceMaster.Identity.Exceptions;
 using BalanceMaster.Identity.Models;
 using BalanceMaster.Identity.Requests;
+using BalanceMaster.Identity.Responses;
 using BalanceMaster.Identity.Services.Abstractions;
 using BalanceMaster.MessageSender.Abstractions.Services;
 using Microsoft.AspNetCore.Identity;
@@ -10,11 +11,17 @@ namespace BalanceMaster.Identity.Services.Implementations;
 
 public sealed class IdentityService : IIdentityService
 {
+    #region Fields
+
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly ITokenService _tokenService;
     private readonly IEmailSender _emailSender;
     private readonly ILogger<IdentityService> _logger;
+
+    #endregion Fields
+
+    #region Ctor
 
     public IdentityService(
         UserManager<ApplicationUser> userManager,
@@ -30,7 +37,11 @@ public sealed class IdentityService : IIdentityService
         _logger = logger;
     }
 
-    public async Task<string> AuthenticateAsync(LoginRequest request)
+    #endregion Ctor
+
+    #region Public Methods
+
+    public async Task<LoginResponse> AuthenticateAsync(LoginRequest request)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
         if (user is null)
@@ -46,10 +57,10 @@ public sealed class IdentityService : IIdentityService
             throw new AuthenticationException();
         }
 
-        return _tokenService.GenerateTokenFor(user);
+        return await CreateLoginResponseAsync(user);
     }
 
-    public async Task<string?> RegisterAsync(RegisterRequest request)
+    public async Task<LoginResponse?> RegisterAsync(RegisterRequest request)
     {
         var user = new ApplicationUser
         {
@@ -63,17 +74,17 @@ public sealed class IdentityService : IIdentityService
             if (_userManager.Options.SignIn.RequireConfirmedAccount)
             {
                 var code = _userManager.GenerateTwoFactorTokenAsync(user, "Email");
-                await SendOtp(request.Email, code.Result);
+                await SendOtpAsync(request.Email, code.Result);
                 return null;
             }
 
-            return _tokenService.GenerateTokenFor(user);
+            return await CreateLoginResponseAsync(user);
         }
 
         throw new IdentityException(result.Errors);
     }
 
-    public async Task ConfirmEmail(ConfirmEmailRequest request)
+    public async Task ConfirmEmailAsync(ConfirmEmailRequest request)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
         if (user is null)
@@ -91,7 +102,7 @@ public sealed class IdentityService : IIdentityService
         await _userManager.UpdateAsync(user);
     }
 
-    public async Task<string> ChangePasswordAsync(ChangePasswordRequest request)
+    public async Task<LoginResponse> ChangePasswordAsync(ChangePasswordRequest request)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
         if (user is null)
@@ -107,7 +118,7 @@ public sealed class IdentityService : IIdentityService
         var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
         if (result.Succeeded)
         {
-            return _tokenService.GenerateTokenFor(user);
+            return await CreateLoginResponseAsync(user);
         }
 
         throw new IdentityException(result.Errors);
@@ -122,10 +133,10 @@ public sealed class IdentityService : IIdentityService
         }
 
         var otp = await _userManager.GenerateTwoFactorTokenAsync(user, "ResetPassword");
-        await SendOtp(request.Email, otp);
+        await SendOtpAsync(request.Email, otp);
     }
 
-    public async Task NewPasswordAsync(NewPasswordRequest request)
+    public async Task<LoginResponse> NewPasswordAsync(NewPasswordRequest request)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
         if (user is null)
@@ -153,10 +164,27 @@ public sealed class IdentityService : IIdentityService
         {
             throw new ChangePasswordException(addPasswordResult.Errors, "Failed to remove the old password");
         }
+
+        return await CreateLoginResponseAsync(user);
     }
 
-    private async Task SendOtp(string email, string otp)
+    #endregion Public Methods
+
+    #region Private Methods
+
+    private async Task<LoginResponse> CreateLoginResponseAsync(ApplicationUser user)
+    {
+        return new LoginResponse
+        {
+            AccessToken = _tokenService.GenerateAccessTokenFor(user),
+            RefreshToken = await _tokenService.GenerateRefreshTokenAsync(user),
+        };
+    }
+
+    private async Task SendOtpAsync(string email, string otp)
     {
         await _emailSender.SendEmailAsync(email, subject: "Otp", otp);
     }
+
+    #endregion Private Methods
 }
