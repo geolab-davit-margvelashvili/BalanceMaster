@@ -1,5 +1,6 @@
 using BalanceMaster.Api.Extensions;
 using BalanceMaster.Api.Middlewares;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,11 @@ builder
     .AddDatabase()
     .AddIdentity();
 
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor
+                                | ForwardedHeaders.XForwardedProto
+                                | ForwardedHeaders.XForwardedHost);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -24,6 +30,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseForwardedHeaders();
 
 app.UseErrorHandlingMiddleware();
 

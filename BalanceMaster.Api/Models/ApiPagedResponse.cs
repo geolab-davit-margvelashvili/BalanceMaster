@@ -9,7 +9,7 @@ public class ApiPagedResponse<TData>
 
 public class Links
 {
-    public required string Self { get; set; }
+    public string? Self { get; set; }
     public string? Next { get; set; }
     public string? Prev { get; set; }
 }

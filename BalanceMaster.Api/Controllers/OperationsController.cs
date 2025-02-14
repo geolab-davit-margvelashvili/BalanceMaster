@@ -53,17 +53,6 @@ public class OperationsController : ControllerBase
         return Ok(response);
     }
 
-    private string CreateLink(int page, int pageSize)
-    {
-        var builder = new UriBuilder(Request.Scheme, Request.Host.Host, Request.Host.Port ?? (Request.Scheme == "https" ? 443 : 80))
-        {
-            Path = Request.Path.ToUriComponent(),
-            Query = $"page={page}&pageSize={pageSize}",
-        };
-
-        return builder.ToString();
-    }
-
     [Authorize]
     [HttpPost("credit")]
     public async Task<ActionResult> Credit(CreditCommand command)
@@ -78,4 +67,13 @@ public class OperationsController : ControllerBase
         var id = await _operationService.ExecuteAsync(command);
         return CreatedAtAction(nameof(GetOperation), new { id }, new { id });
     }
+
+    private string? CreateLink(int page, int pageSize) =>
+        Url.Action(
+            action: "ListOperation",
+            controller: "Operations",
+            values: new { page, pageSize },
+            protocol: Request.Scheme,
+            host: Request.Host.Value
+        );
 }
