@@ -28,9 +28,9 @@ public class OperationsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult> ListOperation([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    public async Task<ActionResult> ListOperation([FromQuery] int page = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
     {
-        var pagedData = await _operationRepository.ListAsync(page, pageSize);
+        var pagedData = await _operationRepository.ListAsync(page, pageSize, cancellationToken);
 
         var response = new ApiPagedResponse<Operation>
         {

@@ -31,16 +31,16 @@ internal sealed class OperationRepository : IOperationRepository
                ?? throw new ObjectNotFoundException(id.ToString(), nameof(Operation));
     }
 
-    public async Task<PagedResponse<Operation>> ListAsync(int page, int pageSize)
+    public async Task<PagedResponse<Operation>> ListAsync(int page, int pageSize, CancellationToken cancellationToken)
     {
         var data = await _appDbContext
             .Operations
             .AsNoTracking()
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
-        var total = await _appDbContext.Operations.CountAsync();
+        var total = await _appDbContext.Operations.CountAsync(cancellationToken);
 
         var response = new PagedResponse<Operation>
         {
